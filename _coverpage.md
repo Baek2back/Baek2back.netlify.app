@@ -1,3 +1,3 @@
 # Today I Learned 📌
 
-> by Bae2kback
+> by. Baek2back

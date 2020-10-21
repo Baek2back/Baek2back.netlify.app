@@ -19,4 +19,4 @@ const result = strs.filter((v) => regExp.test(v));
 ② RegExp.prototype.test();
 ```
 
-MDN[https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/RegExp/test] 레퍼런스를 확인하던 도중, 정규 표현식에 전역 플래그(g)를 설정한 경우 test() 메서드는 정규 표현식의 lastIndex를 업데이트한다는 것을 확인하였다. 즉, 동일한 정규 표현식에 대해 계속 test()를 호출하면 lastIndex 속성이 증가하게 되어 정상적으로 동작하지 않았던 것이다. 따라서 의도대로 동작하도록 하려면 정규 표현식에 전역 플래그를 제거하거나 match()를 이용한 방식으로 해결해야 한다.
+[MDN](https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/RegExp/test) 레퍼런스를 확인하던 도중, 정규 표현식에 전역 플래그(g)를 설정한 경우 test() 메서드는 정규 표현식의 lastIndex를 업데이트한다는 것을 확인하였다. 즉, 동일한 정규 표현식에 대해 계속 test()를 호출하면 lastIndex 속성이 증가하게 되어 정상적으로 동작하지 않았던 것이다. 따라서 의도대로 동작하도록 하려면 정규 표현식에 전역 플래그를 제거하거나 match()를 이용한 방식으로 해결해야 한다.

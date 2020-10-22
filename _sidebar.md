@@ -8,6 +8,7 @@
   - [regExp.prototype.test()](/docs/javascript/Trouble-Shooting-JS.md)
 
 - 🗓: Day by Day.
+  - [[201022] TIL](/docs/day-by-day/201022-TIL.md)
   - [[201021] TIL](/docs/day-by-day/201021-TIL.md)
   - [[201020] TIL](/docs/day-by-day/201020-TIL.md)
   - [[201019] TIL](/docs/day-by-day/201019-TIL.md)

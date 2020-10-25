@@ -1,17 +1,14 @@
 - 🖌: CSS
 
+  - [CSS는 어떻게 동작하는가?](/docs/css/How-CSS-Works.md)
   - [Block Formatting Context](/docs/css/BFC.md)
-  - [flexbox](/docs/css/flexbox.md)
-  - [Margin collapse](/docs/css/Margin-Collapse.md)
   - [Inline Formatting Context](/docs/css/IFC.md)
+  - [Margin collapse](/docs/css/Margin-Collapse.md)
 
 - 👍🏻: Javascript
 
-  - [regExp.prototype.test()](/docs/javascript/Trouble-Shooting-JS.md)
+  - [`RegExp.prototype.test()`](/docs/javascript/RegExp.prototype.test.md)
+  - [`JSON.parse()`](/docs/javascript/JSON.parse.md)
 
 - 🗓: Day by Day.
-  - [[201023] TIL](/docs/day-by-day/201023-TIL.md)
-  - [[201022] TIL](/docs/day-by-day/201022-TIL.md)
-  - [[201021] TIL](/docs/day-by-day/201021-TIL.md)
-  - [[201020] TIL](/docs/day-by-day/201020-TIL.md)
-  - [[201019] TIL](/docs/day-by-day/201019-TIL.md)
+  - [[201019~25] TIL](/docs/day-by-day/201019-25-TIL.md)

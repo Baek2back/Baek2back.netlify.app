@@ -11,6 +11,8 @@
   - [`JSON.parse()`](/docs/javascript/JSON.parse.md)
 
 - 🗓: Day by Day.
+  - [[201031] TIL](/docs/day-by-day/201031-TIL.md)
+  - [[201029] TIL](/docs/day-by-day/201029-TIL.md)
   - [[201028] TIL](/docs/day-by-day/201028-TIL.md)
   - [[201027] TIL](/docs/day-by-day/201027-TIL.md)
   - [[201026] TIL](/docs/day-by-day/201026-TIL.md)

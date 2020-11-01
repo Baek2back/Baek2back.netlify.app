@@ -19,7 +19,7 @@ const result = strs.filter((v) => regExp.test(v));
 ② RegExp.prototype.test();
 ```
 
-정규 표현식에 부합하는 문자열만 필터링하기 위해 두 가지의 메서드를 떠올렸는데, 이상하게도 `test()`를 적용했을 때 배열이 제대로 필터링되지 않는 것을 화인하였고, [MDN](https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/RegExp/test) 레퍼런스를 확인하던 도중, 그 해답을 얻을 수 있었다.
+정규 표현식에 부합하는 문자열만 필터링하기 위해 두 가지의 메서드를 떠올렸는데, 이상하게도 `test()`를 적용했을 때 배열이 제대로 필터링되지 않는 것을 확인하였고, [MDN](https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/RegExp/test) 레퍼런스를 확인하던 도중, 그 해답을 얻을 수 있었다.
 
 > **전역 플래그와 `test()`**
 

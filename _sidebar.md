@@ -1,19 +1,20 @@
 - 🖌: CSS
 
-  - [CSS는 어떻게 동작하는가?](/docs/css/How-CSS-Works.md)
-  - [Block Formatting Context](/docs/css/BFC.md)
-  - [Inline Formatting Context](/docs/css/IFC.md)
-  - [Margin collapse](/docs/css/Margin-Collapse.md)
+  - [CSS Rendering System](/docs/css/css-rendering-system/css-rendering-system.md)
+  - [Margin collapse](/docs/css/margin-collapse/margin-collapse.md)
 
-- 👍🏻: Javascript
+- ⚙️: Javascript
 
-  - [`RegExp.prototype.test()`](/docs/javascript/RegExp.prototype.test.md)
-  - [`JSON.parse()`](/docs/javascript/JSON.parse.md)
+  - 🔍: Concept
+    - [Symbol](/docs/javascript/concept/symbol/symbol.md)
+    - [Iterable](/docs/javascript/concept/iterable/iterable.md)
+    - [Spread Syntax](/docs/javascript/concept/spread-syntax/spread-syntax.md)
+    - [Destructuring Assignment](/docs/javascript/concept/destructuring-assignment/destructuring-assignment.md)
+  - 👍🏻: Usage
+    - [`RegExp.prototype.test()`](/docs/javascript/usage/RegExp.prototype.test.md)
+    - [`JSON.parse()`](/docs/javascript/usage/JSON.parse.md)
+    - [순열과 조합](/docs/javascript/usage/permutations-and-combinations.md)
 
 - 🗓: Day by Day.
-  - [[201031] TIL](/docs/day-by-day/201031-TIL.md)
-  - [[201029] TIL](/docs/day-by-day/201029-TIL.md)
-  - [[201028] TIL](/docs/day-by-day/201028-TIL.md)
-  - [[201027] TIL](/docs/day-by-day/201027-TIL.md)
-  - [[201026] TIL](/docs/day-by-day/201026-TIL.md)
+  - [[201026~201101] TIL](/docs/day-by-day/201026-201101-TIL.md)
   - [[201019~25] TIL](/docs/day-by-day/201019-25-TIL.md)

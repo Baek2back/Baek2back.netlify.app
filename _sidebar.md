@@ -14,6 +14,7 @@
     - [`RegExp.prototype.test()`](/docs/javascript/usage/RegExp.prototype.test.md)
     - [`JSON.parse()`](/docs/javascript/usage/JSON.parse.md)
     - [순열과 조합](/docs/javascript/usage/permutations-and-combinations.md)
+    - [부분집합](/docs/javascript/usage/subset.md)
 
 - 🗓: Day by Day.
   - [[201103] TIL](/docs/day-by-day/201103-TIL.md)

@@ -17,6 +17,7 @@
     - [부분집합](/docs/javascript/usage/subset.md)
 
 - 🗓: Day by Day.
+  - [[201119] TIL](/docs/day-by-day/201119-TIL.md)
   - [[201118] TIL](/docs/day-by-day/201118-TIL.md)
   - [[201117] TIL](/docs/day-by-day/201117-TIL.md)
   - [[201116] TIL](/docs/day-by-day/201116-TIL.md)

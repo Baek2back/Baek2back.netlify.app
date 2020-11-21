@@ -43,7 +43,7 @@ const getCombinations = (arr, toSelectNumber) => {
     const attached = combinations.map((combination) => [fixed, ...combination]);
     // 반환된 결과에 선택해둔 fixed를 앞에 붙여주어야 한다.
     return (result = [...result, ...attached]);
-  });
+  }, []);
 };
 
 const example = [1, 2, 3, 4];
@@ -91,7 +91,7 @@ const getPermutations = (arr, toSelectNumber) => {
     const permutations = getPermutations(rest, toSelectNumber - 1);
     const attached = permutations.map((permutation) => [fixed, ...permutation]);
     return (result = [...result, ...attached]);
-  });
+  }, []);
 };
 
 const example = [1, 2, 3, 4];

@@ -39,7 +39,7 @@ const getCombinations = (arr, toSelectNumber) => {
 
   return arr.reduce((result, fixed, index, origin) => {
     const rest = origin.slice(index + 1); // 선택된 fixed를 제외한 나머지
-    const combinations = getCombinations(rest, selectNumber - 1); // 나머지에서 현재 뽑아야 하는 개수의 보다 한 개 더 적게 선택해야 한다.
+    const combinations = getCombinations(rest, toSelectNumber - 1); // 나머지에서 현재 뽑아야 하는 개수의 보다 한 개 더 적게 선택해야 한다.
     const attached = combinations.map((combination) => [fixed, ...combination]);
     // 반환된 결과에 선택해둔 fixed를 앞에 붙여주어야 한다.
     return (result = [...result, ...attached]);
@@ -110,6 +110,30 @@ const result = getPermutations(example, 3);
   [4,2,1], [4,2,3],
   [4,3,1], [4,3,2]
 */
+```
+
+## 중복조합·중복순열
+
+중복조합과 중복순열은 기존 순열과 조합 알고리즘에서 중복을 허용하게끔만 바꿔주면 된다.
+
+따라서 기존 코드에서 `rest`를 구하는 부분만 수정해주면 가볍게 해결된다. 앞으로 고를 숫자의 갯수는 기존과 마찬가지로 1 감소시키면서 골라야 할 대상은 `fixed`를 제외하지 않게끔 만들어주면 되기 때문이다.
+
+```javascript
+// 중복 조합
+...
+  return arr.reduce((result, fixed, index, origin) => {
+    const rest = origin.slice(index); // 선택된 fixed를 포함시킨다.
+    ...
+  }, []);
+...
+
+// 중복 순열
+...
+  return arr.reduce((result, fixed, index, origin) => {
+    const rest = [...origin.slice(0)]; // 선택된 fixed를 포함시킨다.
+    ...
+  }, []);
+...
 ```
 
 ## Reference

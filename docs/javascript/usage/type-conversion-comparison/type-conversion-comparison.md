@@ -39,7 +39,7 @@ for (var i = 0; i < 100000; i++) {
 
 ### 실행 결과
 
-![string-to-number-result](201120-TIL/string-to-number-result.png)
+![string-to-number-result](string-to-number-result.png)
 
 [jsben.ch](https://jsben.ch/TR6q8)라는 사이트에서 각각의 방법을 벤치마킹 해본 결과 `Number()` 함수를 이용하는 방법이 가장 우수하다는 결론을 내리게 되었다. 비트 연산자나 단항 산술 연산자 `+`를 이용하는 방식과는 월등한 차이가 없었지만 `parseInt` 함수는 비용이 매우 크므로, **충분히 명시적이면서 성능까지 확보할 수 있는 `Number()` 함수를 사용하는 것이 최선의 선택이라고 판단된다.**
 
@@ -74,7 +74,7 @@ for (var i = 0; i < 100000; i++) {
 
 ### 실행 결과
 
-![number-to-string-result](201120-TIL/number-to-string-result.png)
+![number-to-string-result](number-to-string-result.png)
 
 [jsben.ch](https://jsben.ch/KUoeU)에서 수행한 결과 문자열 연결 연산자 `+`를 사용한 타입 변환이 가장 성능이 좋았다. 따라서 가급적 `number` 타입의 값을 `string`으로 변경할 때에는 엔진에 의한 암묵적 변환 방법을 활용하는 것이 성능적인 면에서 우수할 것이라 판단되나, 개인적인 생각으로는 명시적이지는 않다고 판단이 되어 별도의 유틸리티 함수를 선언해두고 필요할 때마다 호출하는 방식이 성능적인 점과 명시성을 둘 다 고려하는 방법이 아닌가 생각한다.
 
@@ -89,4 +89,4 @@ for (var i = 0; i < 100000; i++) {
 }
 ```
 
-![result-with-utility](201120-TIL/result-with-utility.png)
+![result-with-utility](result-with-utility.png)

@@ -30,7 +30,7 @@
 
 JavaScript JITC은 보통 다음 그림과 같은 방식으로 수행된다.
 
-![javascript-jitc](201116-TIL/javascript-jitc.png)
+![javascript-jitc](javascript-jitc.png)
 
 JavaScript는 기본적으로 텍스트 형태로 배포되기 때문에 처음에 소스 코드를 파싱하여 중간 언어(IR, intermediate representation)인 bytecode 형태로 먼저 변환하게 된다.
 
@@ -71,7 +71,7 @@ JavaScript는 변수의 타입이 실행 시간에 바뀔 수 있고, `class` �
 
 ### V8 Structure
 
-![v8-strucutre](201116-TIL/v8-structure.png)
+![v8-strucutre](v8-structure.png)
 
 일단은 `V8`이 자바스크립트 소스 코드를 어떻게 해석하고 실행하는 지 확인해보자.
 

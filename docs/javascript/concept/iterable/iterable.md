@@ -23,8 +23,7 @@ Well-known Symbol인 `Symbol.iterator`를 프로퍼티 키로 사용한 메서�
 이터러블은 `Symbol.iterator`를 프로퍼티 키로 사용한 메서드를 직접 구현하거나 프로토타입 체인을 통해 상속받은 객체를 말한다.
 
 ```javascript
-const isIterable = (v) =>
-  v !== null && typeof v[Symbol.iterator] === 'function';
+const isIterable = v => v !== null && typeof v[Symbol.iterator] === 'function';
 
 isIterable([]); // true
 isIterable(''); // true
@@ -93,7 +92,7 @@ console.log(iterator.next()); // { value: undefined, done: true }
 
 자바스크립트는 이터레이션 프로토콜을 준수하는 객체인 Built-In 이터러블을 제공한다.
 
-| Built-In 이터러블 | `Symbolr.iterator` 메서드                                                              |
+| Built-In 이터러블 | `Symbol.iterator` 메서드                                                               |
 | ----------------- | -------------------------------------------------------------------------------------- |
 | `Array`           | `Array.prototype[Symbol.iterator]`                                                     |
 | `String`          | `String.prototype[Symbol.iterator]`                                                    |

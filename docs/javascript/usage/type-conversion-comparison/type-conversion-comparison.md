@@ -76,17 +76,4 @@ for (var i = 0; i < 100000; i++) {
 
 ![number-to-string-result](number-to-string-result.png)
 
-[jsben.ch](https://jsben.ch/KUoeU)에서 수행한 결과 문자열 연결 연산자 `+`를 사용한 타입 변환이 가장 성능이 좋았다. 따라서 가급적 `number` 타입의 값을 `string`으로 변경할 때에는 엔진에 의한 암묵적 변환 방법을 활용하는 것이 성능적인 면에서 우수할 것이라 판단되나, 개인적인 생각으로는 명시적이지는 않다고 판단이 되어 별도의 유틸리티 함수를 선언해두고 필요할 때마다 호출하는 방식이 성능적인 점과 명시성을 둘 다 고려하는 방법이 아닌가 생각한다.
-
-```javascript
-function convertNumberToString(number) {
-  return number + '';
-}
-
-var arr = [];
-for (var i = 0; i < 100000; i++) {
-  arr[i] = convertNumberToString(100000);
-}
-```
-
-![result-with-utility](result-with-utility.png)
+[jsben.ch](https://jsben.ch/KUoeU)에서 수행한 결과 문자열 연결 연산자 `+`를 사용한 타입 변환이 가장 성능이 좋았다. 따라서 가급적 `number` 타입의 값을 `string`으로 변경할 때에는 엔진에 의한 암묵적 변환 방법을 활용하는 것이 성능적인 면에서 우수할 것이라 판단되므로 가급적 문자열 연결 연산자를 활용하기로 결정하였다.

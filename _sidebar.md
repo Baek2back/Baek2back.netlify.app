@@ -20,10 +20,13 @@
     - [순열과 조합](/docs/javascript/usage/permutations-and-combinations.md)
     - [N번째 순열](/docs/javascript/usage/nth-permutation/nth-permuation.md)
     - [부분집합](/docs/javascript/usage/subset.md)
+  - 🌪: Paradigm
+    - [함수형 자바스크립트](/docs/javascript/paradigm/functional-javascript.md)
   - ✂️: Yak Shaving
     - [자바스크립트 엔진 최적화 기법](/docs/javascript/concept/javascript-engine-optimization/javascript-engine-optimization.md)
 
 - 🗓: Day by Day.
+  - [[201125] TIL](/docs/day-by-day/201125-TIL.md)
   - [[201124] TIL](/docs/day-by-day/201124-TIL.md)
   - [[201123] TIL](/docs/day-by-day/201123-TIL.md)
   - [[201118] TIL](/docs/day-by-day/201118-TIL.md)

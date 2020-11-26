@@ -47,7 +47,7 @@ while (!((cur = iter.next()).done)) {
 }
 ```
 
-## `map`
+## map
 
 ```javascript
 const map = (f, iter) => {
@@ -64,7 +64,7 @@ map(p => p.name, products);
 // (5) ['반팔티', '긴팔티', '핸드폰케이스', '후드티', '바지]
 ```
 
-## 이터러블인 요소면 모두 적용 가능한 `map`의 다형성
+## 이터러블인 요소면 모두 적용 가능한 map의 다형성
 
 ```javascript
 const str = 'abc';
@@ -99,7 +99,7 @@ obj[Symbol.iterator]();
 
 이처럼 순수 배열에만 적용 가능한 `Array.prototype.map`과 달리 직접 구현한 `map`은 이터러블 프로토콜을 따른다면 유사 배열에도 적용하는 것이 가능하다.
 
-## `filter`
+## filter
 
 ```javascript
 const filter = (f, iter) => {
@@ -109,7 +109,7 @@ const filter = (f, iter) => {
 };
 ```
 
-## `reduce`
+## reduce
 
 ```javascript
 // reduce의 동작 방식
@@ -142,7 +142,7 @@ reduce((total_price, product) => total_price + product.price, 0, products); // 1
 reduce((total_price, product) => total_price + product.price, products); // 105000
 ```
 
-## `map`,`filter`,`reduce` 활용
+## map,filter,reduce 활용
 
 ```javascript
 const add = (a, b) => a + b;
@@ -163,7 +163,7 @@ reduce(
 ); // 30000
 ```
 
-## `go`
+## go
 
 ```javascript
 // go는 즉시 평가하는 데 사용된다.
@@ -201,7 +201,7 @@ go(
 ); // 30000
 ```
 
-## `pipe`
+## pipe
 
 ```javascript
 // pipe는 함수를 합성하는 데 사용한다. 즉, 함수를 리턴하는 함수이다.
@@ -242,7 +242,7 @@ const pipe = (f, ...fs) => (...args) => {
 };
 ```
 
-## `curry`
+## curry
 
 ```javascript
 /**

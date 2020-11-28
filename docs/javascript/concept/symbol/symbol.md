@@ -55,11 +55,11 @@ if (newSymbol) console.log('newSymbol is exist');
 
 `Symbol.for` 메서드는 인수로 전달받은 문자열을 key로 사용하여 key와 symbol 값의 쌍이 저장되어 있는 전역 symbol 레지스트리(Global Symbol Registry)에서 해당 key와 일치하는 symbol 값을 검색한다.
 
-- [검색 성공] → 검색된 symbol 값을 반환한다.
-- [검색 실패] → 새로운 symbol 값을 생성하여 전달된 인수를 key로 설정하여 전역 symbol 레지스트리에 저장한 후, 생성된 symbol 값을 반환한다.
+- [**검색 성공**] → 검색된 symbol 값을 반환한다.
+- [**검색 실패**] → 새로운 symbol 값을 생성하여 전달된 인수를 key로 설정하여 전역 symbol 레지스트리에 저장한 후, 생성된 symbol 값을 반환한다.
 
 ```javascript
-// 전역 symbol 레지스트리에서 검색 실패
+// 전역 symbol 레지스트리에서 검색 실패 → 새로운 symbol 값 생성
 const s1 = Symbol.for('newSymbol');
 // 전역 symbol 레지스트리에서 검색 성공 → 검색된 symbol 값을 반환
 const s2 = Symbol.for('newSymbol');

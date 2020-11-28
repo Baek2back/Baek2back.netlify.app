@@ -119,6 +119,10 @@ for (;;) {
   const item = res.value;
   console.log(item);
 }
+
+for (const item of iterator) {
+  console.log(item);
+}
 ```
 
 ## 유사 배열 객체
@@ -152,6 +156,31 @@ for (const item of arrayLike) {
 하지만 모든 유사 배열 객체가 이터러블인 것은 아니며 그러한 경우 ES6에서 도입된 `Array.from` 메서드를 사용하여 배열로 간단하게 변환할 수 있다. `Array.from` 메서드는 유사 배열 객체 또는 이터러블을 인수로 전달받아 배열로 변환한 뒤 반환한다.
 
 ```javascript
+const arrayLike = {
+  0: 1,
+  1: 2,
+  2: 3,
+  length: 3,
+  [Symbol.iterator]() {
+    let [i, _this, limit] = [0, this, this.length];
+    return {
+      next() {
+        const value = _this[i];
+        const done = i >= limit;
+        i = done ? i : i + 1;
+        return { value, done };
+      }
+    };
+  }
+};
+
+for (const a of arrayLike) {
+  console.log(a);
+}
+
+console.log(...arrayLike); // 1 2 3
+const list = [...arrayLike]; // [1,2,3]
+
 const arrayLike = {
   0: 1,
   1: 2,

@@ -16,15 +16,18 @@
     - [`RegExp.prototype.test()`](/docs/javascript/usage/RegExp.prototype.test.md)
     - [`JSON.parse()`](/docs/javascript/usage/JSON.parse.md)
     - [`Number.isNaN()`](/docs/javascript/usage/Number.isNaN.md)
-    - [순열과 조합](/docs/javascript/usage/permutations-and-combinations.md)
-    - [N번째 순열](/docs/javascript/usage/nth-permutation/nth-permuation.md)
-    - [부분집합](/docs/javascript/usage/subset.md)
   - 🌪: Paradigm
     - [함수형 자바스크립트](/docs/javascript/paradigm/functional-javascript.md)
+  - 🔥: Algorithm
+    - [순열과 조합](/docs/javascript/algorithm/permutations-and-combinations.md)
+    - [N번째 순열](/docs/javascript/algorithm/nth-permutation/nth-permuation.md)
+    - [부분집합](/docs/javascript/algorithm/subset.md)
+    - [K번 배열 회전하기](/docs/javascript/algorithm/rotate-k-times-in-array.md)
   - ✂️: Yak Shaving
     - [자바스크립트 엔진 최적화 기법](/docs/javascript/concept/javascript-engine-optimization/javascript-engine-optimization.md)
 
 - 🗓: Day by Day.
+  - [[201130] TIL](/docs/day-by-day/201130-TIL.md)
   - [[201127] TIL](/docs/day-by-day/201127-TIL.md)
   - [[201125] TIL](/docs/day-by-day/201125-TIL.md)
   - [[201123] TIL](/docs/day-by-day/201123-TIL.md)

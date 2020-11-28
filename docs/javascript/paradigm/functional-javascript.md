@@ -294,9 +294,226 @@ go(
 // curry 적용 이후
 go(
   products,
+  products => filter(p => p.price < 20000)(products),
+  products => map(p => p.price)(products),
+  products => reduce(add)(products),
+  log
+);
+
+go(
+  products,
   filter(p => p.price < 20000),
   map(p => p.price),
   reduce(add),
   log
 ); // 30000
+```
+
+## range
+
+```javascript
+log(range(5));
+// 위의 코드의 출력 결과를 [0,1,2,3,4]로 만들어보자.
+
+const range = length => {
+  let i = -1;
+  const res = [];
+  while (++i < length) res.push(i);
+  return res;
+};
+
+let list = range(5);
+log(list); // [0,1,2,3,4]
+log(reduce(add, list)); // 6
+
+const L = {};
+L.range = function* (length) {
+  let i = -1;
+  while (++i < length) yield i;
+};
+
+let list = L.range(5);
+log(list);
+// GeneratorFunctionPrototype {...}
+log(reduce(add, list)); // 6
+
+/*
+  range, L.range의 가장 큰 차이는 각각 생성해 낸 list의 내용이 있다.
+  우선 range의 경우 전체 배열이 출력되고, L.range의 경우 이터레이터가 출력된다.
+  하지만 최종적으로 두 함수 모두 같은 결과를 만들어 낸 이유는 reduce가 이터러블을 인자로 받기 때문이다.
+  배열과 이터레이터 모두 이터러블이지만 둘의 차이는 이터레이터는 next()가 실행되기 전에는 평가되지 않는다는 점이다.
+  따라서 L.range의 결과를 얻는데 있어서 미리 [0,1,2,3,4,5]라는 배열을 생성해 둘 필요가 없는 것이다.
+*/
+```
+
+## take
+
+```javascript
+log(take(2, [1, 2, 3, 4, 5]));
+// 전체 이터러블에서 2개의 요소만을 선택하게끔 구현해보자.
+// [1, 2]
+
+const take = (limit, iter) => {
+  const res = [];
+  for (const a of iter) {
+    res.push(a);
+    if (limit === res.length) return res;
+  }
+  return res;
+};
+
+log(take(10, range(Infinity)));
+// range는 전체 배열을 미리 생성하기 때문에 RangeError가 발생한다.
+log(take(10, L.range(Infinity)));
+// L.range의 경우 필요할 때 값을 평가하기 때문에 문제없이 동작한다.
+
+const take = curry(...);
+
+go(
+  range(10000),
+  take(5),
+  reduce(add),
+  log
+);
+// [0,1,2,3,4, ..., 9999]
+// [0,1,2,3,4]
+// 10
+
+go(
+  L.range(10000),
+  take(5),
+  reduce(add),
+  log
+);
+// [0,1,2,3,4]
+// 10
+```
+
+## L.map, L.filter
+
+```javascript
+const L = {};
+L.map = function* (f, iter) {
+  for (const a of iter) {
+    yield f(a);
+  }
+};
+
+let it = L.map(a => a + 10, [1, 2, 3]);
+log(it);
+// GeneratorFunctionPrototype {...}
+log([...it]);
+// [11,12,13]
+// 위의 코드는 다음과 같다.
+log(it.next().value);
+// 11
+log(it.next().value);
+// 12
+log(it.next().value);
+// 13
+
+L.filter = function* (f, iter) {
+  for (const a of iter) {
+    if (f(a)) yield a;
+  }
+};
+let it = L.filter(a => a % 2, [1, 2, 3]);
+log(it);
+// GeneratorFunctionPrototype {...}
+log([...it]);
+// [1,3]
+
+L.map = curry(...);
+L.filter = curry(...);
+```
+
+## 제때 계산법 vs 느긋한 계산법
+
+```javascript
+// (1) range,map,filter,take,reduce
+go(
+  range(10),
+  map(n => n + 10),
+  filter(n => n % 2),
+  take(2),
+  reduce(add),
+  log
+);
+/*
+  [0,1,2,3,4,5,6,7,8,9],
+  [10,11,12,13,14,15,...],
+  [11,13,15,17,19],
+  [11,13],
+  24
+*/
+
+// (2) L.range,L.map,L.filter,take,reduce
+go(
+  L.range(10),
+  L.map(n => n + 10),
+  L.filter(n => n % 2),
+  take(2),
+  reduce(add),
+  log
+);
+/*
+  [    0  ][   1   ][    2  ][    3   ]
+  [   10  ][  11   ][   12  ][   13   ]
+  [ false ][ true  ][ false ][  true  ]
+  [ ----- ][  11(✓)][ ----- ][   13(✓)]
+  24
+*/
+
+/*
+  두 방식 모두 결과는 동일하지만, 가장 큰 차이는 (1)의 경우 위에서부터 모두 평가하면서 내려가지만, (2)의 경우 평가를 미룬 이터레이터를 위에서부터 반환한다는 점이다.
+  (1) range → map → filter → take → reduce → log
+  (2) reduce → take → L.filter → L.map → L.range(0) → L.map(10) → L.filter(10 % 2 → false) → take(제외) → ...
+  따라서 (2)의 경우 take할 요소를 filter에게 요청하고, filter는 다시 map에게 필터링할 요소를 요청하는 방식으로 진행되는 것이다.
+*/
+```
+
+## find
+
+```javascript
+const users = [
+  { age: 32 },
+  { age: 29 },
+  { age: 28 },
+  { age: 37 },
+  { age: 15 },
+  { age: 22 }
+];
+
+log(find(u => u.age < 30, users));
+// Object {age: 29}
+
+const find = (f, iter) => go(iter, filter(f), take(1), ([a]) => a);
+
+// 위의 find 함수에서 아쉬운 점은 한 개의 결과만을 필요로 하는 데도 불구하고 모두 순회한다는 점이다.
+// 따라서 filter를 L.filter로 변경하여 필요한 값을 얻을 때 까지만 순회하는 방식으로 바꾸면 더 효율적이다.
+const find = (f, iter) => go(iter, L.filter(f), take(1), ([a]) => a);
+```
+
+## L.map, L.filter를 이용하여 map,filter 구현하기
+
+```javascript
+const takeAll = take(Infinity);
+
+L.map = curry(function* (f, iter) {
+  for (const a of iter) {
+    yield f(a);
+  }
+});
+
+const map = curry((f, iter) => go(iter, L.map(f), takeAll));
+const map = curry(pipe(L.map, takeAll));
+
+L.filter = curry(function* (f, iter) {
+  for (const a of iter) {
+    if (f(a)) yield a;
+  }
+});
+
+const filter = curry((f, iter) => go(iter, L.filter(f), takeAll));
+const filter = curry(pipe(L.filter, takeAll));
 ```

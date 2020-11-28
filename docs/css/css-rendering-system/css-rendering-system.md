@@ -242,7 +242,7 @@ E의 경우에도 D와 마찬가지로 line box 내에 배치할만한 충분한
 
 ## Box Model
 
-![box-model](201028-TIL/box-model.png)
+![box-model](box-model.png)
 
 한 개의 Element는 총 4개의 Box를 갖고 있다.
 

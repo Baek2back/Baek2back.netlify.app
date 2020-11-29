@@ -22,9 +22,10 @@
     - [순열과 조합](/docs/javascript/algorithm/permutations-and-combinations.md)
     - [N번째 순열](/docs/javascript/algorithm/nth-permutation/nth-permuation.md)
     - [부분집합](/docs/javascript/algorithm/subset.md)
-    - [K번 배열 회전하기](/docs/javascript/algorithm/rotate-k-times-in-array.md)
+    - [배열 K번 회전하기](/docs/javascript/algorithm/rotate-k-times-in-array.md)
   - ✂️: Yak Shaving
-    - [자바스크립트 엔진 최적화 기법](/docs/javascript/concept/javascript-engine-optimization/javascript-engine-optimization.md)
+    - [자바스크립트 엔진 최적화 기법](/docs/javascript/yak-shaving/javascript-engine-optimization/javascript-engine-optimization.md)
+    - [꼬리재귀 최적화](/docs/javascript/yak-shaving/tail-recursion-optimization/tail-recursion-optimization.md)
 
 - 🗓: Day by Day.
   - [[201130] TIL](/docs/day-by-day/201130-TIL.md)
@@ -33,6 +34,7 @@
   - [[201123] TIL](/docs/day-by-day/201123-TIL.md)
   - [[201118] TIL](/docs/day-by-day/201118-TIL.md)
   - [[201117] TIL](/docs/day-by-day/201117-TIL.md)
+  - [[201123-201129] TIL](/docs/day-by-day/201123-201129-TIL.md)
   - [[201116-201122] TIL](/docs/day-by-day/201116-201122-TIL.md)
   - [[201109-201115] TIL](/docs/day-by-day/201109-201115-TIL.md)
   - [[201102~201108] TIL](/docs/day-by-day/201102-201108-TIL.md)

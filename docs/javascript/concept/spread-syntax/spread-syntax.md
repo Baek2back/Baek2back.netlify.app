@@ -18,7 +18,7 @@ console.log(
 ); // ['a', '1'] ['b', '2']
 ```
 
-spread 문법의 결과는 값이 아니다. 즉, spread 문법(...)이 피연산자를 연산하여 값을 생성하는 연산자가 아님을 의미한다. 따라서 spread 문법의 결과는 변수에 할당할 수 없다.
+spread 문법의 결과는 값이 아니다. 즉, spread 문법(`...`)이 피연산자를 연산하여 값을 생성하는 연산자가 아님을 의미한다. 따라서 spread 문법의 결과는 변수에 할당할 수 없다.
 
 ```javascript
 const list = ...[1,2,3]; // Syntax Error: Unexpected token ...

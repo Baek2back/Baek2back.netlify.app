@@ -30,6 +30,7 @@
     - [꼬리재귀 최적화](/docs/javascript/yak-shaving/tail-recursion-optimization/tail-recursion-optimization.md)
 
 - 🗓: Day by Day.
+  - [[201202] TIL](/docs/day-by-day/201202-TIL.md)
   - [[201130] TIL](/docs/day-by-day/201130-TIL.md)
   - [[201127] TIL](/docs/day-by-day/201127-TIL.md)
   - [[201125] TIL](/docs/day-by-day/201125-TIL.md)

@@ -8,7 +8,9 @@
 
 힙은 기본적으로 **완전 이진 트리**(Complete Binary Tree)를 기본으로 한 자료 구조이며, 부모 노드와 자식 노드 간의 대소관계가 성립하는 자료 구조이다. 따라서 힙의 루트 노드는 힙 내의 데이터들 중 **가장 큰 값**(Max Heap)이거나 **가장 작은 값**(Min Heap)이 된다.
 
-![max-heap](max-heap.png)
+<center>
+  <img src="docs/javascript/algorithm/priority-queue/max-heap.png" alt="max-heap">
+</center>
 
 > [!NOTE] **완전 이진 트리**(Complete Binary Tree)
 >
@@ -24,7 +26,9 @@
 
 선형 자료 구조에서는 데이터가 추가되었을 때 `O(n)`의 시간 복잡도가 필요한 반면, 부모가 자식보다 크거나 작게 정렬되어 있는 이진 트리의 경우 새로 추가된 노드의 부모 노드들과만 비교해도 정렬 상태를 유지할 수 있기 때문에 `O(log n)`의 시간 복잡도면 충분하다.
 
-![sort-in-heap](sort-in-heap.png)
+<center>
+  <img src="docs/javascript/algorithm/priority-queue/sort-in-heap.png" alt="sort-in-heap">
+</center>
 
 트리는 보통 링크드 리스트(Linked List)나 배열(Array)과 같은 선형 자료 구조를 이용하여 구현하는데, 완전 이진 트리의 경우에는 배열로 구현하는 것이 더 효율적이다.
 

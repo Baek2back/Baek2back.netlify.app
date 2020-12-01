@@ -21,7 +21,9 @@
 
 보다 명확하게 확인하기 위해 순열을 구하는 방법을 트리로 표현해보자.
 
-![nth-permutation](nth-permutation.png)
+<center>
+  <img src="docs/javascript/algorithm/nth-permutation/nth-permutation.png" alt="nth-permutation">
+</center>
 
 전체 순열을 구하는 방법의 수는 3!로 총 6가지이다. `[0,1,2]` 중에서 어떤 숫자를 고르더라도 중복순열을 구하는 경우가 아니기 때문에 다음에 고를 수 있는 경우의 수는 `[1,2], [0,2], [0,1]`로 줄어들게 된다. 따라서 구해야 하는 N에 대해서 `(골라야 하는 숫자의 개수 - 1)!`로 계속 나누고, 나눈 나머지는 다시 N에 할당하고, 나눈 몫을 이용하면 배열의 요소 중에 몇 번째 index에 위치한 숫자를 고른 경우인지 알 수 있게 된다.
 

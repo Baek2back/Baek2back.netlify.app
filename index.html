@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify/lib/themes/vue.css">
   <script src="//cdn.jsdelivr.net/npm/docsify/lib/docsify.min.js" defer></script>
   <script src="/js/docsify-plugin-flexible-alerts.js" defer></script>
+  <script src="https://unpkg.com/docsify-copy-code@2" defer></script>
 </head>
 
 <body>
@@ -28,6 +29,14 @@
       autoHeader: true,
       'flexible-alerts': {
         style: 'callout'
+      },
+      copyCode: {
+        buttonText: 'Copy to clipboard',
+        errorText: 'Error',
+        successText: 'Copied',
+      },
+      alias: {
+        '/.*/_sidebar.md': '/_sidebar.md'
       }
     }
   </script>

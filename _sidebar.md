@@ -13,6 +13,7 @@
     - [Spread Syntax](/docs/javascript/concept/spread-syntax/spread-syntax.md)
     - [Destructuring Assignment](/docs/javascript/concept/destructuring-assignment/destructuring-assignment.md)
     - [Immutable vs Mutable](/docs/javascript/concept/immutable-vs-mutable/immutable-vs-mutable.md)
+    - [Prototype](/docs/javascript/concept/prototype/prototype.md)
   - 👍🏻: Usage
     - [`number` ↔ `string` 타입 변환 수행 속도 비교](/docs/javascript/usage/type-conversion-comparison/type-conversion-comparison.md)
     - [`RegExp.prototype.test()`](/docs/javascript/usage/RegExp.prototype.test.md)

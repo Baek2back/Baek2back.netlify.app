@@ -27,6 +27,7 @@
     - [부분집합](/docs/javascript/algorithm/subset.md)
     - [배열 K번 회전하기](/docs/javascript/algorithm/rotate-k-times-in-array.md)
     - [우선순위 큐](/docs/javascript/algorithm/priority-queue/priority-queue.md)
+    - [배열 비교하기](/docs/javascript/algorithm/array-compare.md)
   - ✂️: Yak Shaving
     - [자바스크립트 엔진 최적화 기법](/docs/javascript/yak-shaving/javascript-engine-optimization/javascript-engine-optimization.md)
     - [꼬리재귀 최적화](/docs/javascript/yak-shaving/tail-recursion-optimization/tail-recursion-optimization.md)

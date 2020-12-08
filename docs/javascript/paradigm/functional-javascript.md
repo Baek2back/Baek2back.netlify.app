@@ -517,3 +517,71 @@ L.filter = curry(function* (f, iter) {
 const filter = curry((f, iter) => go(iter, L.filter(f), takeAll));
 const filter = curry(pipe(L.filter, takeAll));
 ```
+
+## L.flatten, flatten
+
+```javascript
+log([[1,2],3,4,[5,6],[7,8,9]]);
+// [Array[2]],3,4,Array[2],Array[3]]
+log([...[1,2],3,4,...[5,6],...[7,8,9]]);
+// [1,2,3,4,5,6,7,8,9]
+
+const isIterable = (a) => a && a[Symbol.iterator];
+
+L.flatten = function* (iter) {
+	for (const a of iter) {
+		if (isIterable(a)) for (const b of a) yield b;
+		else yield a;
+};
+
+L.flatten = function* (iter) {
+	for (const a of iter) {
+		if (isIterable(a)) yield* a
+		else yield a;
+	}
+};
+
+log([...L.flatten([[1, 2], 3, 4, [5, 6], [7, 8, 9]])]);
+// [1,2,3,4,5,6,7,8,9]
+
+const flatten = pipe(L.flatten, takeAll);
+```
+
+## L.deepFlat
+
+```javascript
+L.deepFlat = function* f(iter) {
+  for (const a of iter) {
+    if (isIterable(a)) yield* f(a);
+    else yield a;
+  }
+};
+
+log([...L.deepFlat([1, [2, [3, 4], [[5]]]])]);
+// [1,2,3,4,5]
+```
+
+## L.flatMap
+
+```javascript
+log(
+  [
+    [1, 2],
+    [3, 4],
+    [5, 6, 7]
+  ].flatMap((a) => a.map((a) => a + a))
+);
+// [2,4,6,8,10,12,14]
+log(
+  flatten(
+    [
+      [1, 2],
+      [3, 4],
+      [5, 6, 7]
+    ].map((a) => a.map((a) => a + a))
+  )
+);
+// [2,4,6,8,10,12,14]
+
+L.flatMap = curry(pipe(L.map, L.flatten));
+```

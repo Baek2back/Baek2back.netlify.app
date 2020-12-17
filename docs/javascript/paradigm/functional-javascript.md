@@ -1,6 +1,6 @@
 # 함수형 자바스크립트
 
-> ES5에 도입된 배열 고차 함수
+> **ES5에 도입된 배열 고차 함수**
 
 1. `Array.prototype.map`
 2. `Array.prototype.filter`
@@ -9,7 +9,7 @@
 
 위의 고차 함수들은 기본적으로 `Array.prototype`에 정의되어 있기 때문에 `Array-Like` 객체나 `object({})`에는 적용할 수 없다.
 
-> `Array-Like` 객체
+> **`Array-Like` 객체**
 
 배열과 유사하지만 배열은 아닌 객체를 의미하며 다음과 같은 특징을 가진다.
 
@@ -52,7 +52,9 @@ while (!((cur = iter.next()).done)) {
 ```javascript
 const map = (f, iter) => {
   const res = [];
-  for (const a of iter) {
+  let cur;
+  while (!(cur = iter.next()).done) {
+    const a = cur.value;
     res.push(f(a));
   }
   return res;
@@ -104,7 +106,11 @@ obj[Symbol.iterator]();
 ```javascript
 const filter = (f, iter) => {
   const res = [];
-  for (const a of iter) f(a) && res.push(a);
+  let cur;
+  while (!(cur = iter.next()).done) {
+    const a = cur.value;
+    if (f(a)) res.push(a);
+  }
   return res;
 };
 ```
@@ -119,7 +125,11 @@ reduce(add, 0, [1, 2, 3, 4, 5]); // 15
 add(add(add(add(add(0, 1), 2), 3), 4), 5); // 15
 
 const reduce = (f, acc, iter) => {
-  for (const a of iter) acc = f(acc, a);
+  let cur;
+  while (!(cur = iter.next()).done) {
+    const a = cur.value;
+    acc = f(acc, a);
+  }
   return acc;
 };
 
@@ -134,12 +144,27 @@ const reduce = (f, acc, iter) => {
   }
   // iter: [2,3,4,5]
   // acc: 1
-  for (const a of iter) acc = f(acc, a);
+  let cur;
+  while (!(cur = iter.next()).done) {
+    const a = cur.value;
+    acc = f(acc, a);
+  }
   return acc;
 };
 
-reduce((total_price, product) => total_price + product.price, 0, products); // 105000
-reduce((total_price, product) => total_price + product.price, products); // 105000
+log(
+  reduce(
+    (totalPrice, product) => totalPrice + product,
+    0,
+    map(product => product.price, products)
+  )
+); // 105000
+log(
+  reduce(
+    (totalPrice, product) => totalPrice + product,
+    map(product => product.price, products)
+  )
+); // 105000
 ```
 
 ## map,filter,reduce 활용
@@ -172,7 +197,7 @@ go(
   a => a + 1,
   a => a + 10,
   a => a + 100,
-  console.log
+  log
 ); // 111
 
 // 위와 같이 실행되도록 하기 위해 우선 인수들이 배열이라고 생각해보자.
@@ -222,7 +247,7 @@ go(
   a => a + 1,
   a => a + 10,
   a => a + 100,
-  console.log
+  log
 ); // 112
 
 // pipe의 경우는 다음과 같이 사용해야 하는 제약이 있다.
@@ -230,12 +255,12 @@ log(f(add(0, 1)));
 
 // 다음과 같이 사용할 수 있도록 수정해보자.
 const f = pipe(
-  (a, b) => a + b,
+  add,
   a => a + 1,
   a => a + 10,
   a => a + 100
 );
-console.log(f(0, 1)); // 112
+log(f(0, 1)); // 112
 
 const pipe = (f, ...fs) => (...args) => {
   return go(f(...args), ...fs);
@@ -259,7 +284,9 @@ log(mult(2)(3)); // 6
 
 const map = curry((f, iter) => {
   const res = [];
-  for (const a of iter) {
+  let cur;
+  while (!(cur = iter.next()).done) {
+    const a = cur.value;
     res.push(f(a));
   }
   return res;
@@ -267,7 +294,11 @@ const map = curry((f, iter) => {
 
 const filter = curry((f, iter) => {
   const res = [];
-  for (const a of iter) f(a) && res.push(a);
+  let cur;
+  while (!(cur = iter.next()).done) {
+    const a = cur.value;
+    if (f(a)) res.push(a);
+  }
   return res;
 });
 
@@ -276,7 +307,9 @@ const reduce = curry((f, acc, iter) => {
     iter = acc[Symbol.iterator]();
     acc = iter.next().value;
   }
-  for (const a of iter) {
+  let cur;
+  while (!(cur = iter.next()).done) {
+    const a = cur.value;
     acc = f(acc, a);
   }
   return acc;
@@ -300,6 +333,7 @@ go(
   log
 );
 
+// Point-Free style
 go(
   products,
   filter(p => p.price < 20000),
@@ -323,8 +357,8 @@ const range = length => {
 };
 
 let list = range(5);
-log(list); // [0,1,2,3,4]
-log(reduce(add, list)); // 6
+log(list); // [0, 1, 2, 3, 4]
+log(reduce(add, list)); // 10
 
 const L = {};
 L.range = function* (length) {
@@ -335,7 +369,7 @@ L.range = function* (length) {
 let list = L.range(5);
 log(list);
 // GeneratorFunctionPrototype {...}
-log(reduce(add, list)); // 6
+log(reduce(add, list)); // 10
 
 /*
   range, L.range의 가장 큰 차이는 각각 생성해 낸 list의 내용이 있다.
@@ -355,7 +389,9 @@ log(take(2, [1, 2, 3, 4, 5]));
 
 const take = (limit, iter) => {
   const res = [];
-  for (const a of iter) {
+  let cur;
+  while (!(cur = iter.next()).done) {
+    const a = cur.value;
     res.push(a);
     if (limit === res.length) return res;
   }
@@ -599,7 +635,7 @@ function add20(a) {
   return new Promise(resolve => setTimeout(() => resolve(a + 20), 100));
 }
 
-const callbackResult = add10(5, console.log);
+const callbackResult = add10(5, log);
 const promiseResult = add20(5);
 
 callbackResult; // undefined
@@ -737,7 +773,7 @@ go(
   a => a + 10,
   a => a + 100,
   a => a + 1000,
-  console.log
+  log
 ); // 1111
 
 go(
@@ -745,7 +781,7 @@ go(
   a => a + 10,
   a => Promise.resolve(a + 100),
   a => a + 1000,
-  console.log
+  log
 ); // [object Promise]1000
 ```
 
@@ -815,7 +851,7 @@ go(
   a => a + 10,
   a => Promise.resolve(a + 100),
   a => a + 1000,
-  console.log
+  log
 ); // [object Promise]101001000
 ```
 
@@ -842,7 +878,7 @@ go(
   a => a + 10,
   a => Promise.resolve(a + 100),
   a => a + 1000,
-  console.log
+  log
 ); // 1111
 ```
 
@@ -854,7 +890,7 @@ go(
   a => a + 10,
   a => Promise.reject('error')
   a => a + 1000,
-  console.log
+  log
 ); // Uncaught (in promise) error
 
 go(
@@ -862,7 +898,7 @@ go(
   a => a + 10,
   a => Promise.reject('error'),
   a => a + 1000,
-  console.log
+  log
 ).catch(e => console.log(e)); // error
 ```
 
@@ -875,7 +911,7 @@ go(
   [Promise.resolve(1), Promise.resolve(2), Promise.resolve(3)],
   L.map(a => a + 10),
   take(2),
-  console.log
+  log
 ); // [object Promise]10, [object Promise]10
 
 const go1 = (a, f) => (a instanceof Promise ? a.then(f) : f(a));
@@ -897,7 +933,7 @@ go(
   [Promise.resolve(1), Promise.resolve(2), Promise.resolve(3)],
   L.map(a => a + 10),
   take(2),
-  console.log
+  log
 );
 // 0: Promise {<fulfilled>: 11}
 // 1: Promise {<fulfilled>: 12}
@@ -935,7 +971,7 @@ go(
   [Promise.resolve(1), Promise.resolve(2), Promise.resolve(3)],
   L.map(a => a + 10),
   take(2),
-  console.log
+  log
 ); // [11, 12]
 ```
 
@@ -949,7 +985,7 @@ go(
   L.map(a => Promise.resolve(a * a)),
   L.filter(a => a % 2),
   take(2),
-  console.log
+  log
 ); // []
 ```
 
@@ -1035,7 +1071,7 @@ go(
   L.map(a => Promise.resolve(a * a)),
   L.filter(a => Promise.resolve(a % 2)),
   reduce(add),
-  console.log
+  log
 ); // 1[object Promise][object Promise][object Promise] Uncaught (in promise) Symbol(nop)
 ```
 
@@ -1101,7 +1137,7 @@ go(
   L.map(a => delay500(a * a)),
   L.filter(a => a % 2),
   reduce(add),
-  console.log
+  log
 );
 ```
 
@@ -1127,7 +1163,7 @@ go(
   L.filter(a => delay1000(a % 2)),
   L.map(a => delay1000(a * a)),
   C.reduce(add),
-  console.log
+  log
 );
 ```
 

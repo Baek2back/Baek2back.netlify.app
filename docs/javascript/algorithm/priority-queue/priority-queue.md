@@ -10,10 +10,9 @@
 
 <center><img src="docs/javascript/algorithm/priority-queue/max-heap.png" alt="max-heap"></center>
 
-> [!NOTE] **완전 이진 트리**(Complete Binary Tree)
+> **완전 이진 트리**(Complete Binary Tree)
 >
 > <center><img src="docs/javascript/algorithm/priority-queue/complete-binary-tree.png" alt="complete-binary-tree"></center>
->
 > 완전 이진 트리란 마지막 레벨을 제외한 모든 레벨의 node가 완전히 채워져 있으며 마지막 레벨의 node들은 가능한 왼쪽부터 채워져 있는 구조를 의미한다.
 > 따라서 `(A)`의 경우 완전 이진트리가 아니고, `(B)`의 경우는 완전 이진트리이다.
 
@@ -31,7 +30,7 @@
 
 이는 배열의 최대 장점인 인덱스를 통해 해당 원소에 바로 접근이 가능하다는 점을 이용하는 것인데, 이진 트리의 경우 각 레벨에 들어설 수 있는 노드의 최대 개수가 정해져 있기 때문에 간단한 수식을 이용하여 특정 노드의 인덱스를 알아낼 수 있다.
 
-> [!TIP] [루트 노드] → 0, [현재 노드] → `i`
+> [루트 노드] → 0, [현재 노드] → `i`
 >
 > [부모 노드] → `(i - 1) / 2`
 >

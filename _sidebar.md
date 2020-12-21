@@ -6,7 +6,8 @@
   - [Margin collapse](/docs/css/margin-collapse/margin-collapse.md)
 
 - ⚙️: Javascript
-
+  - 🛠: Refactoring
+    - [Chapter 01](/docs/javascript/refactoring/chapter01.md)
   - 🔍: Concept
     - [Symbol](/docs/javascript/concept/symbol/symbol.md)
     - [Iterable](/docs/javascript/concept/iterable/iterable.md)

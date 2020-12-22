@@ -5,7 +5,7 @@
 ```javascript
 const arr = [1, 1, 2, 2, 3, 4];
 
-console.log([new Set(arr)]); // [1,2,3,4]
+[...new Set(arr)]; // [1,2,3,4]
 
 arr.reduce((ret, v) => {
   if (!ret.includes(v)) {
@@ -32,8 +32,7 @@ const arr = [
   [2, 3]
 ];
 
-const set = [...new Set(arr)];
-set; // [[1,1],[1,1],[1,1],[2,3]]
+[...new Set(arr)]; // [[1,1],[1,1],[1,1],[2,3]]
 
 arr.reduce((ret, v) => {
   if (!ret.includes(v)) {

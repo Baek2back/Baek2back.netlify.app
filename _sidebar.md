@@ -25,10 +25,11 @@
   - 🔥: Algorithm
     - [순열과 조합](/docs/javascript/algorithm/permutations-and-combinations.md)
     - [N번째 순열](/docs/javascript/algorithm/nth-permutation/nth-permuation.md)
+    - [집합(Set) 구현하기](/docs/javascript/algorithm/set.md)
     - [부분집합](/docs/javascript/algorithm/subset.md)
     - [배열 K번 회전하기](/docs/javascript/algorithm/rotate-k-times-in-array.md)
-    - [우선순위 큐](/docs/javascript/algorithm/priority-queue/priority-queue.md)
     - [배열 비교하기](/docs/javascript/algorithm/array-compare.md)
+    - [우선순위 큐](/docs/javascript/algorithm/priority-queue/priority-queue.md)
     - [Quick Sort](/docs/javascript/algorithm/quicksort/quicksort.md)
   - ✂️: Yak Shaving
     - [자바스크립트 엔진 최적화 기법](/docs/javascript/yak-shaving/javascript-engine-optimization/javascript-engine-optimization.md)

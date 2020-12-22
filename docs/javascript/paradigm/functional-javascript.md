@@ -52,6 +52,7 @@ while (!((cur = iter.next()).done)) {
 ```javascript
 const map = (f, iter) => {
   const res = [];
+  iter = iter[Symbol.iterator]();
   let cur;
   while (!(cur = iter.next()).done) {
     const a = cur.value;
@@ -106,6 +107,7 @@ obj[Symbol.iterator]();
 ```javascript
 const filter = (f, iter) => {
   const res = [];
+  iter = iter[Symbol.iterator]();
   let cur;
   while (!(cur = iter.next()).done) {
     const a = cur.value;
@@ -125,6 +127,7 @@ reduce(add, 0, [1, 2, 3, 4, 5]); // 15
 add(add(add(add(add(0, 1), 2), 3), 4), 5); // 15
 
 const reduce = (f, acc, iter) => {
+  iter = iter[Symbol.iterator]();
   let cur;
   while (!(cur = iter.next()).done) {
     const a = cur.value;
@@ -141,6 +144,8 @@ const reduce = (f, acc, iter) => {
   if (!iter) {
     iter = acc[Symbol.iterator]();
     acc = iter.next().value;
+  } else {
+    iter = iter[Symbol.iterator]();
   }
   // iter: [2,3,4,5]
   // acc: 1
@@ -201,7 +206,7 @@ go(
 ); // 111
 
 // 위와 같이 실행되도록 하기 위해 우선 인수들이 배열이라고 생각해보자.
-go([0, a => a + 1, a => a + 10, a => a + 100, console.log]);
+go([0, a => a + 1, a => a + 10, a => a + 100, log]);
 
 const go = list => {
   log(list);
@@ -286,6 +291,7 @@ log(mult(2)(3)); // 6
 
 const map = curry((f, iter) => {
   const res = [];
+  iter = iter[Symbol.iterator]();
   let cur;
   while (!(cur = iter.next()).done) {
     const a = cur.value;
@@ -296,6 +302,7 @@ const map = curry((f, iter) => {
 
 const filter = curry((f, iter) => {
   const res = [];
+  iter = iter[Symbol.iterator]();
   let cur;
   while (!(cur = iter.next()).done) {
     const a = cur.value;
@@ -308,6 +315,8 @@ const reduce = curry((f, acc, iter) => {
   if (!iter) {
     iter = acc[Symbol.iterator]();
     acc = iter.next().value;
+  } else {
+    iter = iter[Symbol.iterator]();
   }
   let cur;
   while (!(cur = iter.next()).done) {
@@ -391,6 +400,7 @@ log(take(2, [1, 2, 3, 4, 5]));
 
 const take = (limit, iter) => {
   const res = [];
+  iter = iter[Symbol.iterator]();
   let cur;
   while (!(cur = iter.next()).done) {
     const a = cur.value;
@@ -698,11 +708,11 @@ f(g()); // NaN
 [1]
   .map(g)
   .map(f)
-  .forEach(v => console.log(v)); // 4
+  .forEach(v => log(v)); // 4
 []
   .map(g)
   .map(f)
-  .forEach(v => console.log(v));
+  .forEach(v => log(v));
 ```
 
 배열 내부에 아무런 값이 존재하지 않더라도 에러나 의도치 않은 동작이 발생하지 않는 것을 확인할 수 있다.
@@ -713,7 +723,7 @@ f(g()); // NaN
 new Promise(resolve => setTimeout(() => resolve(2), 100))
   .then(g)
   .then(f)
-  .then(v => console.log(v));
+  .then(v => log(v));
 ```
 
 `Promise`는 비동기적 상황에 대해서 안전하게 함수 합성을 하기 위한 도구로, 비동기적으로 생성되는 값들에 대해 안전하게 핸들링 하기 위한 도구라 할 수 있다.
@@ -757,12 +767,13 @@ const f_g = id =>
     .then(g)
     .then(f)
     .catch(e => e);
-f_g(2).then(console.log); // b
+
+f_g(2).then(log); // b
 
 users.pop();
 users.pop();
 
-f_g(2).then(console.log); // Not exist
+f_g(2).then(log); // Not exist
 ```
 
 ## go, pipe, reduce에서 비동기 제어
@@ -796,8 +807,12 @@ const reduce = curry((f, acc, iter) => {
   if (!iter) {
     iter = acc[Symbol.iterator]();
     acc = iter.next().value;
+  } else {
+    iter = iter[Symbol.iterator]();
   }
-  for (const a of iter) {
+  let cur;
+  while (!(cur = iter.next()).done) {
+    const a = cur.value;
     acc = f(acc, a);
   }
   return acc;
@@ -813,8 +828,12 @@ const reduce = curry((f, acc, iter) => {
   if (!iter) {
     iter = acc[Symbol.iterator]();
     acc = iter.next().value;
+  } else {
+    iter = iter[Symbol.iterator]();
   }
-  for (const a of iter) {
+  let cur;
+  while (!(cur = iter.next()).done) {
+    const a = cur.value;
     acc = acc instanceof Promise ? acc.then(acc => f(acc, a)) : f(acc, a);
   }
   return acc;
@@ -832,9 +851,13 @@ const reduce = curry((f, acc, iter) => {
   if (!iter) {
     iter = acc[Symbol.iterator]();
     acc = iter.next().value;
+  } else {
+    iter = iter[Symbol.iterator]();
   }
   return (function recur(acc) {
-    for (const a of iter) {
+    let cur;
+    while (!(cur = iter.next()).done) {
+      const a = cur.value;
       acc = f(acc, a);
       if (acc instanceof Promise) return acc.then(recur);
     }
@@ -865,9 +888,13 @@ const reduce = curry((f, acc, iter) => {
   if (!iter) {
     iter = acc[Symbol.iterator]();
     acc = iter.next().value;
+  } else {
+    iter = iter[Symbol.iterator]();
   }
   return go1(acc, function recur(acc) {
-    for (const a of iter) {
+    let cur;
+    while (!(cur = iter.next()).done) {
+      const a = cur.value;
       acc = f(acc, a);
       if (acc instanceof Promise) return acc.then(recur);
     }
@@ -901,7 +928,7 @@ go(
   a => Promise.reject('error'),
   a => a + 1000,
   log
-).catch(e => console.log(e)); // error
+).catch(e => log(e)); // error
 ```
 
 ## 지연 평가와 Promise
@@ -1111,7 +1138,7 @@ const reduce = curry((f, acc, iter) => {
     iter = acc[Symbol.iterator]();
     acc = iter.next().value;
   } else {
-    iter = iter.next().value;
+    iter = iter[Symbol.iterator]();
   }
   return go1(acc, function recur(acc) {
     let cur;
@@ -1205,6 +1232,6 @@ C.takeAll = C.take(Infinity);
 C.map = curry(pipe(L.map, C.takeAll));
 C.filter = curry(pipe(L.filter, C.takeAll));
 
-C.map(a => delay500(a * a), [1, 2, 3, 4]).then(console.log); // [1, 4, 9, 16]
-C.filter(a => delay500(a % 2), [1, 2, 3, 4]).then(console.log); // [1, 3]
+C.map(a => delay500(a * a), [1, 2, 3, 4]).then(log); // [1, 4, 9, 16]
+C.filter(a => delay500(a % 2), [1, 2, 3, 4]).then(log); // [1, 3]
 ```

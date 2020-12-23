@@ -19,25 +19,23 @@
 
 ```json
 // invoices.json
-[
-  {
-    "customer": "BigCo",
-    "performances": [
-      {
-        "playID": "hamlet",
-        "audience": 55
-      },
-      {
-        "playID": "as-like",
-        "audience": 35
-      },
-      {
-        "playID": "othello",
-        "audience": 40
-      }
-    ]
-  }
-]
+{
+  "customer": "BigCo",
+  "performances": [
+    {
+      "playID": "hamlet",
+      "audience": 55
+    },
+    {
+      "playID": "as-like",
+      "audience": 35
+    },
+    {
+      "playID": "othello",
+      "audience": 40
+    }
+  ]
+}
 ```
 
 그리고 청구서를 출력하는 간단한 함수가 있다 생각해보자.
@@ -108,20 +106,15 @@ function statement(invoice, plays) {
 
 이제 몇 가지 추가 기능이 필요해진 상황이라 생각해보자.
 
-- 청구 내역을 HTML로 출력하는 기능
+- **청구 내역을 HTML로 출력하는 기능**
 
   - 청구 결과에 문자열을 추가하는 문장 각각을 조건문으로 감싸야 하므로 `statement()` 함수의 복잡도 향상에 크게 기여할 것이다.
 
-- 배우들이 더 많은 장르의 연극을 공연하고 싶어하는 경우
+- **배우들이 더 많은 장르의 연극을 공연하고 싶어하는 경우**
+
   - 공연료 산정과 적립 포인트 계산법에 영향을 줄 것이다.
 
 물론 기존의 코드가 잘 작동하고 추후에 변경할 일이 절대 존재하지 않는다면 상관없었겠지만 요구 사항이 변동되고 다른 사람이 읽고 이해해야 할 일이 생겼을 때 로직을 한눈에 파악하기 어렵다면 그에 따른 대책을 마련해야 한다.
-
-## 리팩터링의 첫 단계
-
-리팩터링에서 테스트의 역할은 굉장히 중요하다. 그렇다면 `statement()` 함수의 테스트는 어떻게 구성하면 좋을까? 이 함수가 문자열을 반환하므로, 다양한 장르의 공연들로 구성된 공연료 청구서 몇 개를 미리 작성하여 문자열 형태로 준비해둔 뒤, 테스트 프레임워크를 이용하여 테스트를 수행하면 될 것이다.
-
-?> 리팩터링하기 전에 제대로 된 테스트부터 마련하고, 테스트는 반드시 성공/실패를 스스로 판단하는 자가진단 테스트로 만든다.
 
 ## statement() 함수 쪼개기
 
@@ -132,7 +125,7 @@ function statement(invoice, plays) {
 for (let perf of invoice.performances) {
   const play = plays[perf.playID];
   let thisAmount = 0;
-  /* switch 문 */
+  // (switch 문)
   switch (play.type) {
     case 'tragedy':
       thisAmount = 40000;
@@ -154,7 +147,6 @@ for (let perf of invoice.performances) {
   volumeCredits += Math.max(perf.audience - 30, 0);
   // 희극 관객 5명마다 추가 포인트를 제공한다.
   if ('comedy' === play.type) volumeCredits += Math.floor(perf.audience / 5);
-
   // 청구 내역을 출력한다.
   result += `  ${play.name}: ${format(thisAmount / 100)} (${
     perf.audience
@@ -172,8 +164,8 @@ for (let perf of invoice.performances) {
 function statement(invoice, plays) {
   ...
   function amountFor(perf, play) {
-    // 값이 바뀌지 않는 변수는 매개변수로 전달
-    let thisAmount = 0; // 변수 초기화
+    // (값이 바뀌지 않는 변수는 매개변수로 전달)
+    let thisAmount = 0; // (변수 초기화)
 
     switch (play.type) {
       case 'tragedy':
@@ -193,7 +185,7 @@ function statement(invoice, plays) {
         throw new Error(`알 수 없는 장르: ${play.type}`);
     }
 
-    return thisAmount; // 함수 내부에서 값이 바뀌는 변수 반환
+    return thisAmount; // (함수 내부에서 값이 바뀌는 변수 반환)
   }
 }
 ```
@@ -212,7 +204,7 @@ function statement(invoice, plays) {
   }).format;
   for (let perf of invoice.performances) {
     const play = plays[perf.playID];
-    let thisAmount = amountFor(perf, play); // 추출한 함수 이용
+    let thisAmount = amountFor(perf, play); // (추출한 함수 이용)
     // 포인트를 적립한다.
     volumeCredits += Math.max(perf.audience - 30, 0);
     // 희극 관객 5명마다 추가 포인트를 제공한다.
@@ -238,7 +230,7 @@ function statement(invoice, plays) {
 
 지금 예시는 자바스크립트로 작성되었으므로 중첩 함수로 만들 수 있었다. 이러한 경우 외부 함수에서 사용하던 변수를 새로 추출한 함수에 매개변수로 전달할 필요가 없어서 편해진다.
 
-!> 다만 `perf`와 `play` 모두 `for...of` 문 안에서 선언된 변수이므로 중첩 함수가 접근하는 것은 불가능하므로 어차피 매개변수로 넘겨야 한다.
+!> 다만 여기에서는 `perf`와 `play` 모두 `for...of` 문 안에서 선언된 변수이므로 중첩 함수가 접근하는 것은 불가능하므로 어차피 매개변수로 넘겨야 한다.
 
 함수를 추출하고 나면 추출된 함수 코드를 자세히 들여다보면서 지금보다 명확하게 표현할 수 있는 간단한 방법은 없는지 검토한다. 가장 먼저 변수의 이름을 더 명확하게 바꿔보자. 가령 `thisAmount`를 `result`로 변경할 수 있을 것이다. 또한 첫 번째 인수인 `perf`를 보다 명확하게 `aPerformance`로 리팩터링 해보자.
 
@@ -247,7 +239,7 @@ function amountFor(aPerformance, play) {
   // perf → aPerformance (보다 명확한 이름으로 변경)
   let result = 0; // thisAmount → result (보다 명확한 이름으로 변경)
   switch (play.type) {
-    case 'tragedy': // 비극
+    case 'tragedy':
       result = 40000;
       if (aPerformance.audience > 30) {
         result += 1000 * (aPerformance.audience - 30);
@@ -329,13 +321,13 @@ function amountFor(aPerformance) {
   switch (
     playFor(aPerformance).type // (play를 playFor() 호출로 변경)
   ) {
-    case 'tragedy': // 비극
+    case 'tragedy':
       result = 40000;
       if (aPerformance.audience > 30) {
         result += 1000 * (aPerformance.audience - 30);
       }
       break;
-    case 'comedy': // 희극
+    case 'comedy':
       result = 30000;
       if (aPerformance.audience > 20) {
         result += 10000 + 500 * (aPerformance.audience - 20);
@@ -347,11 +339,7 @@ function amountFor(aPerformance) {
   }
   return result;
 }
-```
 
-그 다음 `play` 매개변수를 삭제한다.
-
-```javascript
 function statement(invoice, plays) {
   let totalAmount = 0;
   let volumeCredits = 0;
@@ -382,7 +370,7 @@ function statement(invoice, plays) {
   return result;
 
   function playFor(aPerformance) {}
-  function amountFor(perf) {} // play 매개변수 삭제
+  function amountFor(perf) {} // (play 매개변수 삭제)
 }
 ```
 
@@ -422,7 +410,7 @@ function statement(invoice, plays) {
   return result;
 
   function playFor(aPerformance) {}
-  function amountFor(perf) {} // play 매개변수 삭제
+  function amountFor(perf) {} // (play 매개변수 삭제)
 }
 ```
 
@@ -509,6 +497,16 @@ function statement(invoice, plays) {
 하지만 `format`이라는 함수 이름은 이 함수가 하는 일을 충분히 설명해 주지 못한다는 느낌이 든다. 템플릿 문자열 안에서 사용될 이름이기 때문에 `formatAsUSD`라고 하기에는 너무 장황하다. 이 함수의 본질은 화폐 단위 맞추기이기 때문에 그러한 느낌을 살릴 수 있는 이름으로 바꾸어보자.
 
 ```javascript
+// (함수 이름 변경)
+function usd(aNumber) {
+  return new Intl.NumberFormat('en-us', {
+    style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: 2
+  }).format(aNumber / 100);
+  // (단위 변환 로직도 이 함수 안으로 이동)
+}
+
 function statement(invoice, plays) {
   let totalAmount = 0;
   let volumeCredits = 0;
@@ -526,15 +524,7 @@ function statement(invoice, plays) {
   result += `적립 포인트: ${volumeCredits}점\n`;
   return result;
 
-  // (함수 이름 변경)
-  function usd(aNumber) {
-    return new Intl.NumberFormat('en-us', {
-      style: 'currency',
-      currency: 'USD',
-      minimumFractionDigits: 2
-    }).format(aNumber / 100);
-    // (단위 변환 로직도 이 함수 안으로 이동)
-  }
+  function usd(aNumber) {}
   function volumeCreditsFor(aPerformance) {}
   function playFor(aPerformance) {}
   function amountFor(aPerformance) {}
@@ -545,4 +535,621 @@ function statement(invoice, plays) {
 
 > **volumeCredits 변수 제거하기**
 
-다음 차례는 `volumeCredits`다.
+다음 차례는 `volumeCredits`다. 이 변수는 매 루프마다 값을 누적하기 때문에 이 누적되는 부분을 따로 빼내고, `volumeCredits` 변수를 선언하는 문장을 반복문 바로 위로 옮겨보자.
+
+```javascript
+function statement(invoice, plays) {
+  let totalAmount = 0;
+  let result = `청구 내역 (고객명: ${invoice.customer})\n`;
+  for (let perf of invoice.performances) {
+    // 청구 내역을 출력한다.
+    result += `  ${playFor(perf).name}: ${usd(amountFor(perf))} (${
+      perf.audience
+    }석)\n`;
+    totalAmount += amountFor(perf);
+  }
+  // (변수 선언을 반복문 바로 위로 이동)
+  let volumeCredits = 0;
+  // (값을 누적하는 로직을 별도의 for 문으로 분리)
+  for (let perf of invoice.performances) {
+    volumeCredits += volumeCreditsFor(perf);
+  }
+  result += `총액: ${usd(totalAmount)}\n`;
+  result += `적립 포인트: ${volumeCredits}점\n`;
+  return result;
+
+  function usd(aNumber) {}
+  function volumeCreditsFor(aPerformance) {}
+  function playFor(aPerformance) {}
+  function amountFor(aPerformance) {}
+}
+```
+
+그 다음 `volumeCredits` 값을 계산하는 코드를 함수로 추출해보자.
+
+```javascript
+function totalVolumeCredits() {
+  let volumeCredits = 0;
+  for (let perf of invoice.performances) {
+    volumeCredits += volumeCreditsFor(perf);
+  }
+  return volumeCredits;
+}
+
+function statement(invoice, plays) {
+  let totalAmount = 0;
+  let result = `청구 내역 (고객명: ${invoice.customer})\n`;
+  for (let perf of invoice.performances) {
+    // 청구 내역을 출력한다.
+    result += `  ${playFor(perf).name}: ${usd(amountFor(perf))} (${
+      perf.audience
+    }석)\n`;
+    totalAmount += amountFor(perf);
+  }
+  // (값 계산 로직을 함수로 추출)
+  let volumeCredits = totalVolumeCredits();
+  result += `총액: ${usd(totalAmount)}\n`;
+  result += `적립 포인트: ${volumeCredits}점\n`;
+  return result;
+
+  function totalVolumeCredits() {}
+  function usd(aNumber) {}
+  function volumeCreditsFor(aPerformance) {}
+  function playFor(aPerformance) {}
+  function amountFor(aPerformance) {}
+}
+```
+
+함수로 추출한 이후에는 `volumeCredits` 변수를 인라인 해보자.
+
+```javascript
+function statement(invoice, plays) {
+  let totalAmount = 0;
+  let result = `청구 내역 (고객명: ${invoice.customer})\n`;
+  for (let perf of invoice.performances) {
+    // 청구 내역을 출력한다.
+    result += `  ${playFor(perf).name}: ${usd(amountFor(perf))} (${
+      perf.audience
+    }석)\n`;
+    totalAmount += amountFor(perf);
+  }
+  result += `총액: ${usd(totalAmount)}\n`;
+  // (변수 인라인)
+  result += `적립 포인트: ${totalVolumeCredits()}점\n`;
+  return result;
+
+  function totalVolumeCredits() {}
+  function usd(aNumber) {}
+  function volumeCreditsFor(aPerformance) {}
+  function playFor(aPerformance) {}
+  function amountFor(aPerformance) {}
+}
+```
+
+반복문을 쪼개는 작업에 있어서 성능 저하를 우려할 수도 있지만, 이 정도 규모의 중복은 성능에 미치는 영향이 미미한 경우가 많다. 때로는 리팩터링이 성능에 상당한 영향을 주기도 하지만, 잘 다듬어진 코드일 수록 성능 개선 작업이 수월해 진다는 점을 잊지말자. 리팩터링 과정에서 성능이 많이 저하되었다면 리팩터링 이후에 성능 개선을 시도해보자. 대체로 더 깔끔하면서 빠르게 동작하는 코드를 얻을 수 있을 것이다.
+
+이제 `totalAmount`도 앞의 `volumeCredits`와 동일하게 제거해보자. 먼저 반복문을 쪼개고, 변수 초기화 문을 옮긴 다음, 함수를 추출한다. 그 다음 변수를 인라인하는 과정까지 진행해보자.
+
+```javascript
+function totalAmount() {
+  let result = 0;
+  for (let perf of invoice.performances) {
+    result += amountFor(perf);
+  }
+  return result;
+}
+
+function statement(invoice, plays) {
+  let result = `청구 내역 (고객명: ${invoice.customer})\n`;
+  for (let perf of invoice.performances) {
+    // 청구 내역을 출력한다.
+    result += `  ${playFor(perf).name}: ${usd(amountFor(perf))} (${
+      perf.audience
+    }석)\n`;
+  }
+  result += `총액: ${usd(totalAmount())}\n`;
+  result += `적립 포인트: ${totalVolumeCredits()}점\n`;
+  return result;
+
+  function totalAmount() {}
+  function totalVolumeCredits() {}
+  function usd(aNumber) {}
+  function volumeCreditsFor(aPerformance) {}
+  function playFor(aPerformance) {}
+  function amountFor(aPerformance) {}
+}
+```
+
+## 중간 점검: 난무하는 중첩 함수
+
+그렇다면 현재까지의 리팩터링 결과를 한 번 살펴보자.
+
+```javascript
+function statement(invoice, plays) {
+  let result = `청구 내역 (고객명: ${invoice.customer})\n`;
+  for (let perf of invoice.performances) {
+    // 청구 내역을 출력한다.
+    result += `  ${playFor(perf).name}: ${usd(amountFor(perf))} (${
+      perf.audience
+    }석)\n`;
+  }
+  result += `총액: ${usd(totalAmount())}\n`;
+  result += `적립 포인트: ${totalVolumeCredits()}점\n`;
+  return result;
+
+  // 중첩 함수들
+  function totalAmount() {
+    let result = 0;
+    for (let perf of invoice.performances) {
+      result += amountFor(perf);
+    }
+    return result;
+  }
+  function totalVolumeCredits() {
+    let result = 0;
+    for (let perf of invoice.performances) {
+      result += volumeCreditsFor(perf);
+    }
+    return result;
+  }
+  function usd(aNumber) {
+    return new Intl.NumberFormat('en-us', {
+      style: 'currency',
+      currency: 'USD',
+      minimumFractionDigits: 2
+    }).format(aNumber / 100);
+  }
+  function volumeCreditsFor(aPerformance) {
+    let result = 0;
+    result += Math.max(aPerformance.audience - 30, 0);
+    if (playFor(aPerformance).type === 'comedy')
+      result += Math.floor(aPerformance.audience / 5);
+    return result;
+  }
+  function playFor(aPerformance) {
+    return plays[aPerformance.playID];
+  }
+  function amountFor(aPerformance) {
+    let result = 0;
+    switch (playFor(aPerformance).type) {
+      case 'tragedy': 
+        result = 40000;
+        if (aPerformance.audience > 30) {
+          result += 1000 * (aPerformance.audience - 30);
+        }
+        break;
+      case 'comedy': 
+        result = 30000;
+        if (aPerformance.audience > 20) {
+          result += 10000 * 500 * (aPerformance.audience - 20);
+        }
+        result += 300 * aPerformance.audience;
+        break;
+      default:
+        throw new Error(`알 수 없는 장르: ${playFor(aPerformance).type}`);
+    }
+    return result;
+  }
+}
+```
+
+코드 구조가 한결 나아진 것을 확인할 수 있다 `statement()` 함수가 실행하는 문은 급격히 감소하였으며 출력할 문장을 생성하는 일만 하게 된다. 계산 로직은 보조 함수로 추출하였고, 결과적으로 각 계산 과정은 물론 전체 흐름을 이해하기 쉬워졌다.
+
+## 계산 단계와 포맷팅 단계 분리하기
+
+이제 실질적인 기능 변경, `statement()`의 HTML 버전을 만들어보자. 계산 코드가 모두 분리되었기 때문에 최상단 코드에 대응하는 HTML 버전만 작성하면 될 것이다. 하지만 분리된 계산 함수들이 텍스트 버전인 `statement()` 내부의 중첩 함수로 존재하기 때문에 이 모두를 그대로 복사하는 방식으로 HTML 버전을 만드는 것은 비효율적이다. 텍스트 버전, HTML 버전 함수 모두가 똑같은 계산 함수를 사용하게끔 만들어 보자.
+
+먼저 `statement()`에 필요한 데이터를 처리하고, 다음 단계에서는 앞서 처리한 결과를 텍스트 혹은 HTML로 표현하도록 만들어보자. 정리하면 첫 번째 단계에서는 두 번째 단계로 전달할 중간 데이터 구조를 생성하는 것이다.
+
+```javascript
+function statement(invoice, plays) {
+  // (본문 전체를 별도 함수로 추출)
+  return renderPlainText(invoice, plays);
+}
+
+function renderPlainText(invoice, plays) {
+  let result = `청구 내역 (고객명: ${invoice.customer})\n`;
+  for (let perf of invoice.performances) {
+    // 청구 내역을 출력한다.
+    result += `  ${playFor(perf).name}: ${usd(amountFor(perf))} (${
+      perf.audience
+    }석)\n`;
+  }
+  result += `총액: ${usd(totalAmount())}\n`;
+  result += `적립 포인트: ${totalVolumeCredits()}점\n`;
+  return result;
+
+  function totalAmount() {}
+  function totalVolumeCredits() {}
+  function usd(aNumber) {}
+  function volumeCreditsFor(aPerformance) {}
+  function playFor(aPerformance) {}
+  function amountFor(aPerformance) {}
+}
+```
+
+이제 다음으로 두 단계 사이의 중간 데이터 구조 역할을 할 객체를 만들어서 `renderPlainText()`에 인수로 전달한다.
+
+```javascript
+function statement(invoice, plays) {
+  const statementData = {};
+  // (중간 데이터 구조를 인수로 전달)
+  return renderPlainText(statementData, invoice, plays);
+}
+
+// (중간 데이터 구조를 인수로 전달)
+function renderPlainText(data, invoice, plays) {
+  let result = `청구 내역 (고객명: ${invoice.customer})\n`;
+  for (let perf of invoice.performances) {
+    // 청구 내역을 출력한다.
+    result += `  ${playFor(perf).name}: ${usd(amountFor(perf))} (${
+      perf.audience
+    }석)\n`;
+  }
+  result += `총액: ${usd(totalAmount())}\n`;
+  result += `적립 포인트: ${totalVolumeCredits()}점\n`;
+  return result;
+
+  function totalAmount() {}
+  function totalVolumeCredits() {}
+  function usd(aNumber) {}
+  function volumeCreditsFor(aPerformance) {}
+  function playFor(aPerformance) {}
+  function amountFor(aPerformance) {}
+}
+```
+
+이번에는 `renderPlainText()`의 다른 두 인수(`invoice`,`plays`)를 살펴보자. 이 인수들을 통해 전달되는 데이터를 모두 방금 만든 중간 데이터 구조로 옮기면, 계산 관련 코드는 전부 `statement()` 함수로 모으고 `renderPlainText()`는 `data` 매개변수로 전달된 데이터만 처리하게 만들 수 있다.
+
+가장 먼저 고객 정보부터 중간 데이터 구조로 옮겨보자.
+
+```javascript
+function statement(invoice, plays) {
+  const statementData = {};
+  // (고객 데이터를 중간 데이터로 옮김)
+  statementData.customer = invoice.customer;
+  return renderPlainText(statementData, invoice, plays);
+}
+
+function renderPlainText(data, invoice, plays) {
+  // (고객 데이터를 중간 데이터로부터 얻음)
+  let result = `청구 내역 (고객명: ${data.customer})\n`;
+  for (let perf of invoice.performances) {
+    // 청구 내역을 출력한다.
+    result += `  ${playFor(perf).name}: ${usd(amountFor(perf))} (${
+      perf.audience
+    }석)\n`;
+  }
+  result += `총액: ${usd(totalAmount())}\n`;
+  result += `적립 포인트: ${totalVolumeCredits()}점\n`;
+  return result;
+  ...
+}
+```
+
+같은 방식으로 공연 정보까지 중간 데이터 구조로 옮기고 나면 `renderPlainText()`의 `invoice` 매개변수를 삭제해도 된다.
+
+```javascript
+function statement(invoice, plays) {
+  const statementData = {};
+  statementData.customer = invoice.customer;
+  // (공연 정보를 중간 데이터로 옮김)
+  statementData.performances = invoice.performances;
+  // (필요 없어진 인수 삭제)
+  return renderPlainText(statementData, plays);
+}
+
+// (필요 없어진 인수 삭제)
+function renderPlainText(data, plays) {
+  let result = `청구 내역 (고객명: ${data.customer})\n`;
+  for (let perf of data.performances) {
+    // 청구 내역을 출력한다.
+    result += `  ${playFor(perf).name}: ${usd(amountFor(perf))} (${
+      perf.audience
+    }석)\n`;
+  }
+  result += `총액: ${usd(totalAmount())}\n`;
+  result += `적립 포인트: ${totalVolumeCredits()}점\n`;
+  return result;
+
+  function totalAmount() {
+    let result = 0;
+    for (let perf of data.performances) {
+      result += amountFor(perf);
+    }
+    return result;
+  }
+
+  function totalVolumeCredits() {
+    let result = 0;
+    for (let perf of data.performances) {
+      result += volumeCreditsFor(perf);
+    }
+    return result;
+  }
+}
+```
+
+이제 연극 제목도 중간 데이터 구조에서 가져오도록 해보자. 이를 위해 공연 정보 레코드에 연극 데이터를 추가해야 한다.
+
+```javascript
+function statement(invoice, plays) {
+  const statementData = {};
+  statementData.customer = invoice.customer;
+  statementData.performances = invoice.performances.map(enrichPerformance);
+  return renderPlainText(statementData, plays);
+
+  function enrichPerformance(aPerformance) {
+    // (얕은 복사 수행)
+    const result = Object.assign({}, aPerformance);
+    return result;
+  }
+}
+```
+
+일단은 공연 객체를 복사하기만 했지만, 추후에 새로 만든 레코드에 데이터를 채울 것이다. 이때 얕은 복사를 수행한 이유는 불변 데이터(Immutable)로 취급하기 위해서이다.
+
+이제 연극 정보를 담을 자리가 마련되었으니 실제로 데이터를 담아보자. `playFor()` 함수를 `statement()`로 옮긴다.
+
+```javascript
+function statement(invoice, plays) {
+  const statementData = {};
+  statementData.customer = invoice.customer;
+  statementData.performances = invoice.performances;
+  return renderPlainText(statementData, plays);
+
+  function enrichPerformance(aPerformance) {
+    const result = Object.assign({}, aPerformance);
+    result.play = playFor(result); // (중간 데이터에 연극 정보를 저장)
+    return result;
+  }
+
+  // (renderPlainText()의 중첩 함수 였던 playFor()를 statement()로 옮김)
+  function playFor(aPerformance) {
+    return plays[aPerformance.playID];
+  }
+}
+```
+
+그런 다음 `renderPlainText()` 안에서 `playFor()`를 호출하던 부분을 중간 데이터를 사용하도록 바꾼다.
+
+```javascript
+function renderPlainText(data, plays) {
+  let result = `청구 내역 (고객명: ${data.customer})\n`;
+  for (let perf of data.performances) {
+    // 청구 내역을 출력한다.
+    result += `  ${perf.play.name}: ${usd(amountFor(perf))} (${
+      perf.audience
+    }석)\n`;
+  }
+  result += `총액: ${usd(totalAmount())}\n`;
+  result += `적립 포인트: ${totalVolumeCredits()}점\n`;
+  return result;
+
+  function volumeCreditsFor(aPerformance) {
+    let result = 0;
+    result += Math.max(aPerformance.audience - 30, 0);
+    if (aPerformance.play.type === 'comedy')
+      result += Math.floor(aPerformance.audience / 5);
+    return result;
+  }
+
+  function amountFor(aPerformance) {
+    let result = 0;
+    switch (aPerformance.play.type) {
+      case 'tragedy': 
+        result = 40000;
+        if (aPerformance.audience > 30) {
+          result += 1000 * (aPerformance.audience - 30);
+        }
+        break;
+      case 'comedy': 
+        result = 30000;
+        if (aPerformance.audience > 20) {
+          result += 10000 + 500 * (aPerformance.audience - 20);
+        }
+        result += 300 * aPerformance.audience;
+        break;
+      default:
+        throw new Error(`알 수 없는 장르: ${aPerformance.play.type}`);
+    }
+    return result;
+  }
+}
+```
+
+이어서 `amountFor()`도 비슷한 방식으로 옮겨보자.
+
+```javascript
+function statement(invoice, plays) {
+  const statementData = {};
+  statementData.customer = invoice.customer;
+  statementData.performances = invoice.performances;
+  return renderPlainText(statementData, plays);
+
+  function enrichPerformance(aPerformance) {
+    const result = Object.assign({}, aPerformance);
+    result.play = playFor(result);
+    result.amount = amountFor(result);
+    return result;
+  }
+
+  function playFor(aPerformance) {}
+  function amountFor(aPerformance) {}
+}
+
+function renderPlainText(data, plays) {
+  let result = `청구 내역 (고객명: ${data.customer})\n`;
+  for (let perf of data.performances) {
+    // 청구 내역을 출력한다.
+    result += `  ${perf.play.name}: ${usd(perf.amount)} (${perf.audience}석)\n`;
+  }
+  result += `총액: ${usd(totalAmount())}\n`;
+  result += `적립 포인트: ${totalVolumeCredits()}점\n`;
+  return result;
+
+  function totalAmount() {
+    let result = 0;
+    for (let perf of data.performances) {
+      result += perf.amount;
+    }
+    return result;
+  }
+}
+```
+
+다음으로 적립 포인트 계산 부분을 옮겨보자.
+
+```javascript
+function statement(invoice, plays) {
+  const statementData = {};
+  statementData.customer = invoice.customer;
+  statementData.performances = invoice.performances;
+  return renderPlainText(statementData, plays);
+
+  function enrichPerformance(aPerformance) {
+    const result = Object.assign({}, aPerformance);
+    result.play = playFor(result);
+    result.amount = amountFor(result);
+    result.volumeCredits = volumeCreditsFor(result);
+    return result;
+  }
+
+  function volumeCreditsFor(aPerformance) {}
+  function playFor(aPerformance) {}
+  function amountFor(aPerformance) {}
+}
+
+function renderPlainText(data, plays) {
+  let result = `청구 내역 (고객명: ${data.customer})\n`;
+  for (let perf of data.performances) {
+    // 청구 내역을 출력한다.
+    result += `  ${perf.play.name}: ${usd(perf.amount)} (${perf.audience}석)\n`;
+  }
+  result += `총액: ${usd(totalAmount())}\n`;
+  result += `적립 포인트: ${totalVolumeCredits()}점\n`;
+  return result;
+
+  function totalVolumeCredits() {
+    let result = 0;
+    for (let perf of data.performances) {
+      result += perf.volumeCredits;
+    }
+    return result;
+  }
+}
+```
+
+마지막으로 총합을 구하는 부분을 옮긴다.
+
+```javascript
+function statement(invoice, plays) {
+  const statementData = {};
+  statementData.customer = invoice.customer;
+  statementData.performances = invoice.performances;
+  statementData.totalAmount = totalAmount(statementData);
+  statementData.totalVolumeCredits = totalVolumeCredits(statementData);
+  return renderPlainText(statementData, plays);
+
+  function totalAmount(data) {}
+  function totalVolumeCredits(data) {}
+}
+
+function renderPlainText(data, plays) {
+  let result = `청구 내역 (고객명: ${data.customer})\n`;
+  for (let perf of data.performances) {
+    // 청구 내역을 출력한다.
+    result += `  ${perf.play.name}: ${usd(perf.amount)} (${perf.audience}석)\n`;
+  }
+  result += `총액: ${usd(data.totalAmount)}\n`;
+  result += `적립 포인트: ${data.totalVolumeCredits}점\n`;
+  return result;
+}
+```
+
+물론 총합을 구하는 두 함수 `totalAmount()`와 `totalVolumeCredits()`의 본문에서 `statementData` 변수를 사용할 수도 있지만 정확히 매개변수로 전달하는 방식이 더 명확해 보인다.
+
+이제는 반복문을 파이프라인으로 바꿔보자.
+
+```javascript
+function renderPlainText(data, plays) {
+  function totalAmount(data) {
+    return data.performances.reduce((total, p) => total + p.amount, 0);
+  }
+  function totalVolumeCredits(data) {
+    return data.performances.reduce((total, p) => total + p.volumeCredits, 0);
+  }
+}
+```
+
+이제 첫 단계인 `statement()`에 필요한 데이터 처리에 해당하는 코드를 모두 함수로 분리해보자.
+
+```javascript
+function statement(invoice, plays) {
+  return renderPlainText(createStatementData(invoice, plays));
+}
+
+// (중간 데이터 생성을 전담한다)
+function createStatementData(invoice, plays) {
+  const statementData = {};
+  statementData.customer = invoice.customer;
+  statementData.performances = invoice.performances;
+  statementData.totalAmount = totalAmount(statementData);
+  statementData.totalVolumeCredits = totalVolumeCredits(statementData);
+  return statementData;
+}
+```
+
+이제 두 단계가 명확히 분리되었으니 각 코드를 별도의 파일에 저장한다.
+
+```javascript
+/* statement.js */
+import createStatementData from './createStatementData.js';
+
+/* createStatementData.js */
+export default function createStatementData(invoice, plays) {
+  const result = {};
+  result.customer = invoice.customer;
+  result.performances = invoice.performances.map(enrichPerformance);
+  result.totalAmount = totalAmount(result);
+  result.totalVolumeCredits = totalVolumeCredits(result);
+  return result;
+
+  function enrichPerformance(aPerformance) {}
+  function palyFor(aPerformance) {}
+  function amountFor(aPerformance) {}
+  function volumeCreditsFor(aPerformance) {}
+  function totalAmount(data) {}
+  function totalVolumeCredits(data) {}
+}
+```
+
+이제 HTML 버전을 완성시켜 보자.
+
+```javascript
+/* statement.js */
+function htmlStatement(invoice, plays) {
+  // (중간 데이터 생성 함수를 공유)
+  return renderHtml(createStatementData(invoice, plays));
+}
+
+function renderHtml(data) {
+  let result = `<h1>청구 내역 (고객명: ${data.customer})</h1>\n`;
+  result += `<table>\n`;
+  result += `<tr><th>연극</th><th>좌석 수</th><th>금액</th></tr>`;
+  for (let perf of data.performances) {
+    result += `  <tr><td>${perf.play.name}</td><td>(${perf.audience}석)</td></tr>`;
+    result += `<td>${usd(perf.amount)}</td></tr>\n`;
+  }
+  result += `</table>\n`;
+  result += `<p>총액: <em>${usd(data.totalAmount)}</em></p>\n`;
+  result += `<p>적립 포인트: <em>${data.totalVolumeCredits}</em>점</p>\n`;
+  return result;
+}
+
+function usd(aNumber) {}
+```
+
+?> `usd()`를 `renderHtml()`에서도 사용할 수 있도록 최상위로 옮겼다.
+
+## 중간 점검: 두 파일(과 두 단계)로 분리됨

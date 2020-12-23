@@ -2,27 +2,40 @@
 
 ES6에서 도입된 spread 문법은 하나로 뭉쳐 있는 여러 값들의 집합을 펼쳐서 개별적인 값들의 목록으로 만든다. spread 문법의 대상은 `for...of` 문으로 순회할 수 있는 이터러블에 한정된다.
 
-```javascript
-// ...[1,2,3]은 [1,2,3]을 개별 요소로 분리한다.
-console.log(...[1, 2, 3]); // 1 2 3
-
-// 문자열은 이터러블이다.
-console.log(...'Hello'); // H e l l o
-
-// Map,Set은 이터러블이다.
-console.log(
-  ...new Map([
-    ['a', '1'],
-    ['b', '2']
-  ]);
-); // ['a', '1'] ['b', '2']
-```
-
-spread 문법의 결과는 값이 아니다. 즉, spread 문법(`...`)이 피연산자를 연산하여 값을 생성하는 연산자가 아님을 의미한다. 따라서 spread 문법의 결과는 변수에 할당할 수 없다.
+!> spread 문법의 결과는 값이 아니다. 즉, spread 문법(`...`)이 피연산자를 연산하여 값을 생성하는 **연산자가 아님을 의미**한다. 따라서 spread 문법의 결과는 변수에 할당할 수 없다.
 
 ```javascript
 const list = ...[1,2,3]; // Syntax Error: Unexpected token ...
 ```
+
+## spread 문법과 얕은 복사
+
+```javascript
+const spreadWithIterable = (iterable, target = []) => {
+  const iterator = iterable[Symbol.iterator]();
+  let cur;
+  while (!(cur = iterator.next()).done) {
+    target.push(cur.value);
+  }
+  return target;
+};
+```
+
+기본적으로 이터러블인 경우에는 `Symbol.iterator`를 프로퍼티 키로 사용한 메서드를 호출하면 `next()` 메서드를 보유한 이터레이터를 반환받게 된다. 따라서 최종적으로는 `target`에는 이터러블의 얕은 복사본이 담기게 된다.
+
+하지만 이터러블이 아닌 일반 객체에서도 `spread` 문법이 사용 가능한데, 이는 어떻게 구현할 수 있을까?
+
+```javascript
+const spreadWithObject = (obj, target = {}) => {
+  const entries = Object.entries(obj);
+  for (const [key, value] of entries) {
+    target[key] = value;
+  }
+  return target;
+};
+```
+
+실제 구현은 어떻게 되어있는 지는 모르겠지만 유추해보면 `Object.entries()` 메서드를 이용하여 특정 객체의 프로퍼티 키와 값을 추출한 배열을 통해 `target`에 복사하는 형태로 되어있을 것이다. 중요한 점은 이때에 프로퍼티 값이 다시 객체 타입의 값을 갖는 경우에 대한 처리를 하지 않으므로 얕은 복사가 수행되는 것이다.
 
 ## 함수 호출문의 인수 목록에서 사용하는 경우
 

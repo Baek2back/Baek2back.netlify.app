@@ -509,7 +509,6 @@ go(
   [   10  ][  11   ][   12  ][   13   ]
   [ false ][ true  ][ false ][  true  ]
   [ ----- ][  11(✓)][ ----- ][   13(✓)]
-  24
 */
 
 /*
@@ -802,7 +801,7 @@ go(
 
 ```javascript
 const go = (...args) => reduce((a, f) => f(a), args);
-const pipe = (f, ...fs) => (...as) => go(f(...as), ...fs);
+const pipe = (f, ...fs) => (...args) => go(f(...args), ...fs);
 const reduce = curry((f, acc, iter) => {
   if (!iter) {
     iter = acc[Symbol.iterator]();

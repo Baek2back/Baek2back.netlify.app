@@ -8,7 +8,9 @@
 
 ## Syntax
 
-> JSON.parse(text[, _reviver_])
+```javascript
+JSON.parse(text[, _reviver_])
+```
 
 ## Examples
 
@@ -22,7 +24,7 @@ JSON.parse('null'); // null
 
 > **_reviver_**
 
-앞서 Syntax에서 _reviver_ 는 _Optional_ 이다. 만약 _reviver_ 가 제공되면 파싱된 값은 return되기 전에 변형(transform)된다. 만약 _reviver_ 가 `undefined`를 반환(또는 함수가 종료되기 이전에 실행이 중단되는 등의 이유로 어떠한 값도 반환하지 않는 경우)하면 해당 프로퍼티는 반환되는 `object`에서 제거된다.
+앞서 Syntax에서 _reviver_ 는 _Optional_ 이다. 만약 _reviver_ 가 제공되면 파싱된 값은 `return`되기 전에 변형(transform)된다. 만약 _reviver_ 가 `undefined`를 반환(또는 함수가 종료되기 이전에 실행이 중단되는 등의 이유로 어떠한 값도 반환하지 않는 경우)하면 해당 프로퍼티는 반환되는 `object`에서 제거된다.
 
 ```javascript
 JSON.parse('{"p":5}', (key, value) => {

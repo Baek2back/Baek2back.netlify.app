@@ -33,14 +33,14 @@ end:
 
 ```javascript
 const getCombinations = (arr, toSelectNumber) => {
-  if (toSelectNumber === 1) return arr.map((value) => [value]);
+  if (toSelectNumber === 1) return arr.map(value => [value]);
   // 1개를 선택하는 경우에는 배열 내에 있는 요소를 각각 선택하는 것과 동일하다.
   // ex) [1,2,3] → [[1],[2],[3]]
 
   return arr.reduce((result, fixed, index, origin) => {
     const rest = origin.slice(index + 1); // 선택된 fixed를 제외한 나머지
     const combinations = getCombinations(rest, toSelectNumber - 1); // 나머지에서 현재 뽑아야 하는 개수의 보다 한 개 더 적게 선택해야 한다.
-    const attached = combinations.map((combination) => [fixed, ...combination]);
+    const attached = combinations.map(combination => [fixed, ...combination]);
     // 반환된 결과에 선택해둔 fixed를 앞에 붙여주어야 한다.
     return (result = [...result, ...attached]);
   }, []);
@@ -84,12 +84,12 @@ const rest = [...origin.slice(0, index), ...origin.slice(index + 1)];
 
 ```javascript
 const getPermutations = (arr, toSelectNumber) => {
-  if (toSelectNumber === 1) return arr.map((value) => [value]);
+  if (toSelectNumber === 1) return arr.map(value => [value]);
 
   return arr.reduce((result, fixed, index, origin) => {
     const rest = [...origin.slice(0, index), ...origin.slice(index + 1)];
     const permutations = getPermutations(rest, toSelectNumber - 1);
-    const attached = permutations.map((permutation) => [fixed, ...permutation]);
+    const attached = permutations.map(permutation => [fixed, ...permutation]);
     return (result = [...result, ...attached]);
   }, []);
 };
@@ -130,7 +130,7 @@ const result = getPermutations(example, 3);
 // 중복 순열
 ...
   return arr.reduce((result, fixed, index, origin) => {
-    const rest = [...origin.slice(0)]; // 선택된 fixed를 포함시킨다.
+    const rest = origin.slice(); // 선택된 fixed를 포함시킨다.
     ...
   }, []);
 ...

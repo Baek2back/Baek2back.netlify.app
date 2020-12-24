@@ -69,3 +69,17 @@ const rotateToRight = (array, times) => {
 const arr = [1, 2, 3, 4, 5, 6, 7];
 rotateToRight(arr, 3); // [5, 6, 7, 1, 2, 3, 4]
 ```
+
+## 최종 구현
+
+```javascript
+const rotate = (array, times, direction = 'left') => {
+  times = times % array.length;
+  if (!times) return array;
+  const origin = [...array];
+  const pickedRange = direction === 'left' ? times : array.length - times;
+  const picked = origin.slice(0, pickedRange);
+  const remainder = origin.slice(pickedRange);
+  return [...remainder, ...picked];
+};
+```

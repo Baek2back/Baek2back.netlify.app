@@ -52,6 +52,12 @@ if (!Number.isNaN) {
 }
 ```
 
+ES6에 도입된 `Object.is()` 메서드를 이용하여도 `NaN`을 식별할 수 있다.
+
+```javascript
+Object.is(NaN, NaN); // true
+```
+
 [문자열 다루기 기본](https://programmers.co.kr/learn/courses/30/lessons/12918) 문제를 풀던 도중 `Number.isNaN`을 활용하여 문제를 풀어보고자 시도하던 도중 생긴 궁금증 때문에 정리하게 되었다. 문제가 조금 명확하지 않은 듯 하지만 `1e12` 꼴의 지수 형태의 input을 처리하는 것이 문제였던 것 같다.
 
 ## Reference

@@ -712,13 +712,13 @@ function statement(invoice, plays) {
   function amountFor(aPerformance) {
     let result = 0;
     switch (playFor(aPerformance).type) {
-      case 'tragedy': 
+      case 'tragedy':
         result = 40000;
         if (aPerformance.audience > 30) {
           result += 1000 * (aPerformance.audience - 30);
         }
         break;
-      case 'comedy': 
+      case 'comedy':
         result = 30000;
         if (aPerformance.audience > 20) {
           result += 10000 * 500 * (aPerformance.audience - 20);
@@ -895,7 +895,7 @@ function statement(invoice, plays) {
 function statement(invoice, plays) {
   const statementData = {};
   statementData.customer = invoice.customer;
-  statementData.performances = invoice.performances;
+  statementData.performances = invoice.performances.map(enrichPerformance);
   return renderPlainText(statementData, plays);
 
   function enrichPerformance(aPerformance) {
@@ -937,13 +937,13 @@ function renderPlainText(data, plays) {
   function amountFor(aPerformance) {
     let result = 0;
     switch (aPerformance.play.type) {
-      case 'tragedy': 
+      case 'tragedy':
         result = 40000;
         if (aPerformance.audience > 30) {
           result += 1000 * (aPerformance.audience - 30);
         }
         break;
-      case 'comedy': 
+      case 'comedy':
         result = 30000;
         if (aPerformance.audience > 20) {
           result += 10000 + 500 * (aPerformance.audience - 20);
@@ -964,7 +964,7 @@ function renderPlainText(data, plays) {
 function statement(invoice, plays) {
   const statementData = {};
   statementData.customer = invoice.customer;
-  statementData.performances = invoice.performances;
+  statementData.performances = invoice.performances.map(enrichPerformance);
   return renderPlainText(statementData, plays);
 
   function enrichPerformance(aPerformance) {
@@ -1004,7 +1004,7 @@ function renderPlainText(data, plays) {
 function statement(invoice, plays) {
   const statementData = {};
   statementData.customer = invoice.customer;
-  statementData.performances = invoice.performances;
+  statementData.performances = invoice.performances.map(enrichPerformance);
   return renderPlainText(statementData, plays);
 
   function enrichPerformance(aPerformance) {
@@ -1046,7 +1046,7 @@ function renderPlainText(data, plays) {
 function statement(invoice, plays) {
   const statementData = {};
   statementData.customer = invoice.customer;
-  statementData.performances = invoice.performances;
+  statementData.performances = invoice.performances.map(enrichPerformance);
   statementData.totalAmount = totalAmount(statementData);
   statementData.totalVolumeCredits = totalVolumeCredits(statementData);
   return renderPlainText(statementData, plays);
@@ -1093,7 +1093,7 @@ function statement(invoice, plays) {
 function createStatementData(invoice, plays) {
   const statementData = {};
   statementData.customer = invoice.customer;
-  statementData.performances = invoice.performances;
+  statementData.performances = invoice.performances.map(enrichPerformance);
   statementData.totalAmount = totalAmount(statementData);
   statementData.totalVolumeCredits = totalVolumeCredits(statementData);
   return statementData;
@@ -1153,3 +1153,167 @@ function usd(aNumber) {}
 ?> `usd()`를 `renderHtml()`에서도 사용할 수 있도록 최상위로 옮겼다.
 
 ## 중간 점검: 두 파일(과 두 단계)로 분리됨
+
+현재 코드는 두 개의 파일로 구성된다.
+
+```javascript
+/* statement.js */
+import createStatementData from './createStatementData.js';
+
+function statement(invoice, plays) {
+  return renderPlainText(createStatementData(invoice, plays));
+}
+
+function renderPlainText(data, plays) {
+  let result = `청구 내역 (고객명: ${data.customer})\n`;
+  for (let perf of data.performances) {
+    result += `  ${perf.play.name}: ${usd(perf.amount)} (${perf.audience}석\n`;
+  }
+  result += `총액: ${usd(data.totalAmount)}\n`;
+  result += `적립 포인트: ${data.totalVolumeCredits}점\n`;
+  return result;
+}
+
+function htmlStatement(invoice, plays) {
+  return renderHtml(createStatementData(invoice, plays));
+}
+
+function renderHtml(data) {
+  let result = `<h1>청구 내역 (고객명: ${data.customer})</h1>\n`;
+  result += `<table>\n`;
+  result += `<tr><th>연극</th><th>좌석 수</th><th>금액</th></tr>`;
+  for (let perf of data.performances) {
+    result += `  <tr><td>${perf.play.name}</td><td>(${perf.audience}석)</td></tr>`;
+    result += `<td>${usd(perf.amount)}</td></tr>\n`;
+  }
+  result += `</table>\n`;
+  result += `<p>총액: <em>${usd(data.totalAmount)}</em></p>\n`;
+  result += `<p>적립 포인트: <em>${data.totalVolumeCredits}</em>점</p>\n`;
+  return result;
+}
+
+function usd(aNumber) {
+  return new Intl.NumberFormat('en-us', {
+    style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: 2
+  }).format(aNumber / 100);
+}
+
+/* createStatementData.js */
+
+export default function createStatementData(invoice, plays) {
+  const result = {};
+  result.customer = invoice.customer;
+  result.performances = invoice.performances.map(enrichPerformance);
+  result.totalAmount = totalAmount(result);
+  result.totalVolumeCredits = totalVolumeCredits(result);
+  return result;
+}
+
+function enrichPerformance(aPerformance) {
+  const result = Object.assign({}, aPerformance);
+  result.play = playFor(result);
+  result.amount = amountFor(result);
+  result.volumeCredits = volumeCreditsFor(result);
+  return result;
+}
+
+function playFor(aPerformance) {
+  return plays[aPerformance.playID];
+}
+
+function amountFor(aPerformance) {
+  let result = 0;
+  switch (aPerformance.play.type) {
+    case 'tragedy':
+      result = 40000;
+      if (aPerformance.audience > 30) {
+        result += 1000 * (aPerformance.audience - 30);
+      }
+      break;
+    case 'comedy':
+      result = 30000;
+      if (aPerformance.audience > 20) {
+        result += 10000 + 500 * (aPerformance.audience - 20);
+      }
+      result += 300 * aPerformance.audience;
+      break;
+    default:
+      throw new Error(`알 수 없는 장르: ${aPerformance.play.type}`);
+  }
+  return result;
+}
+
+function volumeCreditsFor(aPerformance) {
+  let result = 0;
+  result += Math.max(aPerformance.audience - 30, 0);
+  if (aPerformance.play.type === 'comedy')
+    result += Math.floor(aPerformance.audience / 5);
+  return result;
+}
+
+function totalAmount(data) {
+  return data.performances.reduce((total, p) => total + p.amount, 0);
+}
+
+function totalVolumeCredits(data) {
+  return data.performances.reduce((total, p) => total + p.volumeCredits, 0);
+}
+```
+
+전체 라인 수는 늘었지만 추가된 코드 덕분에 전체 로직을 구성하는 요소 각각이 더 뚜렷해지고, 계산하는 부분과 출력 형식을 다루는 부분이 분리되었다. 이처럼 모듈화를 진행하면 각 부분이 하는 일과 그 부분들이 맞물려 돌아가는 과정을 파악하기 쉬워진다. 결국 모듈화를 한 덕분에 코드를 중복하지 않고도 HTML 버전을 만들 수 있게 되었다.
+
+## 다형성을 활용해 계산 코드 재구성하기
+
+이번에는 연극 장르를 추가하고 장르마다 공연료와 적립 포인트 계산법을 다르게 지정하도록 수정해보자. 이는 해당 계산을 수행하는 함수에서 조건문을 수정하는 방식으로 바꿀 수 있을 것이다. `amountFor()` 함수를 보면 연극 장르 별로 계산 방법이 다르다는 것을 알 수 있다.
+
+여기서는 일단 객체 지향의 핵심 특성인 다형성(polymorphism)을 활용해보자. 우선 상속 계층을 구성해서 희극 서브클래스와 비극 서브클래스가 각각의 구체적인 계산 로직을 정의하게끔 하는 것이다. 호출부에서는 공연료 계산 함수를 호출하기만 하고, 희극인지 비극인지에 따라 정확한 계산 방식은 언어 차원에서 처리하도록 하는 것이다. 그러면 우선 상속 계층부터 정의해야 하는데 공연료와 적립 포인트 계산 함수를 담을 클래스를 만들어보자.
+
+> **공연료 계산기 만들기**
+
+핵심은 각 공연의 정보를 중간 데이터 구조에 채워주는 `enrichPerformance()` 함수이다. 현재 이 함수는 `amountFor()`와 `volumeCreditsFor()`를 호출하여 공연료와 적립 포인트를 계산한다. 이제 이 두 함수를 전용 클래스로 옮겨보자. 이 클래스는 공연 관련 데이터를 계산하는 함수들로 구성되므로 `PerformanceCalculator` 정도의 이름이 적당할 것 같다.
+
+```javascript
+/* createStatementData.js */
+
+// (공연료 계산기 클래스)
+class PerformanceCalculator {
+  constructor(aPerformance) {
+    this.performance = aPerformance;
+  }
+}
+
+function enrichPerformance(aPerformance) {
+  // (공연료 계산기 생성)
+  const calculator = new PerformanceCalculator(aPerformance);
+  const result = Object.assign({}, aPerformance);
+  result.play = playFor(result);
+  result.amount = amountFor(result);
+  result.volumeCredits = volumeCreditsFor(result);
+  return result;
+}
+```
+
+기존 코드에서 몇 가지 동작을 이 클래스로 옮겨보자. 먼저 연극 레코드부터 시작해보자.
+
+```javascript
+class PerformanceCalculator {
+  constructor(aPerformance, aPlay) {
+    this.performance = aPerformance;
+    this.play = aPlay;
+  }
+}
+
+function enrichPerformance(aPerformance) {
+  // (공연 정보를 계산기로 전달)
+  const calculator = new PerformanceCalculator(aPerformance, playFor(aPerformance));
+  const result = Object.assign({}, aPerformance);
+  result.play = calculator.play;
+  result.amount = amountFor(result);
+  result.volumeCredits = volumeCreditsFor(result);
+  return result;
+}
+```
+
+> **함수들을 계산기로 옮기기**

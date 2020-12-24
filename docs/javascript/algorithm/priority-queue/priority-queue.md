@@ -14,7 +14,7 @@
 >
 > <center><img src="docs/javascript/algorithm/priority-queue/complete-binary-tree.png" alt="complete-binary-tree"></center>
 > 완전 이진 트리란 마지막 레벨을 제외한 모든 레벨의 node가 완전히 채워져 있으며 마지막 레벨의 node들은 가능한 왼쪽부터 채워져 있는 구조를 의미한다.
-> 따라서 `(A)`의 경우 완전 이진트리가 아니고, `(B)`의 경우는 완전 이진트리이다.
+> 따라서 (A)의 경우 완전 이진트리가 아니고, (B)의 경우는 완전 이진트리이다.
 
 힙의 장점은 가장 큰 값 혹은 작은 값에 접근하고 싶을 때 비교 연산을 진행하지 않고 한 번에 접근할 수 있다는 점으로, 여러 개의 데이터 중에서 가장 크거나 작은 값을 빠르게 찾아야 하는 경우 유용하다.
 
@@ -30,13 +30,13 @@
 
 이는 배열의 최대 장점인 인덱스를 통해 해당 원소에 바로 접근이 가능하다는 점을 이용하는 것인데, 이진 트리의 경우 각 레벨에 들어설 수 있는 노드의 최대 개수가 정해져 있기 때문에 간단한 수식을 이용하여 특정 노드의 인덱스를 알아낼 수 있다.
 
-> [루트 노드] → 0, [현재 노드] → `i`
+> [**루트 노드**] → 0, [**현재 노드**] → `i`
 >
-> [부모 노드] → `(i - 1) / 2`
+> [**부모 노드**] → `(i - 1) / 2`
 >
-> [왼쪽 자식 노드] → `2i + 1`
+> [**왼쪽 자식 노드**] → `2i + 1`
 >
-> [오른쪽 자식 노드] → `2i + 2`
+> [**오른쪽 자식 노드**] → `2i + 2`
 
 또한 이진 트리의 경우, 자식 노드를 최대 2개까지만 가질 수 있기 때문에 트리의 최대 노드 개수는 2<sup>h</sup> - 1개이다. 따라서 해당 크기만큼만 배열을 메모리에 할당하면 중간에 노드를 새로 삽입하기 위해 배열의 원소를 뒤로 미는 경우가 발생하지 않는다.
 
@@ -45,7 +45,7 @@
 ## 구현
 
 ```javascript
-class Heap {
+class PriorityQueue {
   constructor() {
     this.nodes = [];
   }
@@ -79,22 +79,20 @@ bubbleUp(index= this.nodes.length - 1) {
   const parentNode = this.nodes[parentIndex];
   if (parentNode >= currentNode) return;
 
-  this.nodes[index] = parentNode;
-  this.nodes[parentIndex] = currentNode;
-  index = parentIndex;
-  this.bubbleUp(index);
+  [this.nodes[index], this.nodes[parentIndex]] = [parentNode, currentNode]
+  this.bubbleUp(parentIndex);
 }
 ```
 
 위의 코드는 최대 힙의 경우만 가능한 코드이므로, 외부에서 함수를 주입받아 부모 노드와 자식 노드 간의 대소 비교를 할 수 있게끔 수정하면 우선순위 큐의 형태로 만들 수 있을 것이다.
 
 ```javascript
-compareTwoNodes (n1, n2) {
+static compareTwoNodes (n1, n2) {
   return n1 - n2;
 }
 insert (value) {
   this.nodes.push(value);
-  this.bubbleUp(this.compareTwoNodes);
+  this.bubbleUp(PriorityQueue.compareTwoNodes);
 }
 bubbleUp(compareFunction, index = this.nodes.length - 1) {
   if (index < 1) return;
@@ -102,10 +100,8 @@ bubbleUp(compareFunction, index = this.nodes.length - 1) {
   const parentIndex = Math.floor((index - 1) / 2);
   const parentNode = this.nodes[parentIndex];
   if (compareFunction(currentNode, parentNode) <= 0) return;
-  this.nodes[index] = parentNode;
-  this.nodes[parentIndex] = currentNode;
-  index = parentIndex;
-  this.bubbleUp(index);
+  [this.nodes[index], this.nodes[parentIndex]] = [parentNode, currentNode]
+  this.bubbleUp(compareFunction, parentIndex);
 }
 ```
 
@@ -118,46 +114,44 @@ extract() {
   if (this.nodes.length <= 1) return this.nodes.pop();
   const extracted = this.nodes[0];
   this.nodes[0] = this.nodes.pop();
-  this.trickleDown(this.compareTwoNodes);
+  this.trickleDown(PriorityQueue.compareTwoNodes);
 
   return extracted;
 }
 
 trickleDown (compareFunction, index = 0) {
+  const { length } = this.nodes;
   const leftChildIndex = 2 * index + 1;
   const rightChildIndex = 2 * index + 2;
-  const length = this.nodes.length;
 
-  let largest = index;
+  let largestIndex = index;
 
-  if (leftChildIndex < length && compareFunction(this.nodes[leftChildIndex], this.nodes[largest]) > 0) {
-    largest = leftChildIndex;
+  if (leftChildIndex < length && compareFunction(this.nodes[leftChildIndex], this.nodes[largestIndex]) > 0) {
+    largestIndex = leftChildIndex;
   }
-  if (rightChildIndex < length && compareFunction(this.nodes[rightChildIndex], this.nodes[largest]) > 0) {
-    largest = rightChildIndex;
+  if (rightChildIndex < length && compareFunction(this.nodes[rightChildIndex], this.nodes[largestIndex]) > 0) {
+    largestIndex = rightChildIndex;
   }
-  if (largest !== index) {
-    [this.nodes[largest], this.nodes[index]] = [this.nodes[index], this.nodes[largest]];
-    this.trickleDown(compareFunction, largest);
+  if (largestIndex !== index) {
+    [this.nodes[largestIndex], this.nodes[index]] = [this.nodes[index], this.nodes[largestIndex]];
+    this.trickleDown(compareFunction, largestIndex);
   }
 }
 ```
 
 핵심은 루트 노드에서 시작하여 본인을 포함한 양쪽 자식 노드의 값을 비교한 후, 가장 큰 값을 갖는 노드를 부모 노드의 위치에 배치하는 것이다. 이 과정에서 부모 노드와 자식 노드의 위치가 변경되었다면 변경된 부모 노드의 인덱스를 다시 `trickleDown` 메소드의 인자로 넘겨서 과정을 반복하게 된다.
 
-그렇다면 이제 처음에 구현하고자 했던 `PriorityQueue`를 만들어보자.
-
 ```javascript
 class PriorityQueue {
   constructor() {
     this.nodes = [];
   }
-  compareTwoNodes(n1, n2) {
+  static compareTwoNodes(n1, n2) {
     return n1 - n2;
   }
   insert(value) {
     this.nodes.push(value);
-    this.bubbleUp(this.compareTwoNodes);
+    this.bubbleUp(PriorityQueue.compareTwoNodes);
   }
   bubbleUp(compareFunction, index = this.nodes.length - 1) {
     if (index < 1) return;
@@ -165,16 +159,14 @@ class PriorityQueue {
     const parentIndex = Math.floor((index - 1) / 2);
     const parentNode = this.nodes[parentIndex];
     if (compareFunction(currentNode, parentNode) <= 0) return;
-    this.nodes[index] = parentNode;
-    this.nodes[parentIndex] = currentNode;
-    index = parentIndex;
-    this.bubbleUp(compareFunction, index);
+    [this.nodes[index], this.nodes[parentIndex]] = [parentNode, currentNode];
+    this.bubbleUp(compareFunction, parentIndex);
   }
   extract() {
     if (this.nodes.length <= 1) return this.nodes.pop();
     const extracted = this.nodes[0];
     this.nodes[0] = this.nodes.pop();
-    this.trickleDown(this.compareTwoNodes);
+    this.trickleDown(PriorityQueue.compareTwoNodes);
 
     return extracted;
   }

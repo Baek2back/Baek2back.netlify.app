@@ -125,25 +125,23 @@ arr.reduce((src, target) => {
 
 배열의 요소가 객체인 경우는 다소 복잡하다.
 
-!> 일반적으로 알고리즘 문제에서 등장하는 경우와 동일하게 프로퍼티 값은 다시 중첩 객체를 가질 수 있으나, 그 값으로는 원시 값이나 배열만 갖는다고 가정한다.
-
 ```javascript
 const objectEquals = (a, b) => {
   if (Object.is(a, b)) return true;
-  const aKeys = Object.keys(a);
-  const bKeys = Object.keys(b);
-  if (aKeys.length !== bKeys.length) return false;
-  for (const key of aKeys) {
+  const aKey = Object.keys(a);
+  const bKey = Object.keys(b);
+  if (aKey.length !== bKey.length) return false;
+  for (const key of aKey) {
     if (
       typeof a[key] === 'object' &&
-      typeof b[key] === 'object' &&
       a[key] !== null &&
+      typeof b[key] === 'object' &&
       b[key] !== null
     ) {
       if (!objectEquals(a[key], b[key])) return false;
-    } else {
-      if (a[key] !== b[key]) return false;
-    }
+    } else if (typeof a[key] === 'function' && typeof b[key] === 'function') {
+      if (a[key].toString() !== b[key].toString()) return false;
+    } else if (a[key] !== b[key]) return false;
   }
   return true;
 };

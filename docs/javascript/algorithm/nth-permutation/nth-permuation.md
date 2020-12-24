@@ -32,19 +32,49 @@ N = 5;
 answer = [];
 numbers = [0,1,2];
 
-idx = Math.floor(N / (numbers.length - 1)!); // idx = 5 / 2! = 2 → [0,1,2]에서 2번째 숫자를 고른다.
-N = (N % (numbers.length - 1)!) // N = 5 % 2! = 1
+idx = Math.floor(N / (numbers.length - 1)!);
+// idx = 5 / 2! = 2 → [0,1,2]에서 2번째 숫자를 고른다.
+N = (N % (numbers.length - 1)!)
+// N = 5 % 2! = 1
 answer = [2], numbers = [0,1]
 
-idx = Math.floor(N / (numbers.length - 1)!); // idx = 1 / 1! = 1 → [0,1]에서 1번째 숫자를 고른다.
+idx = Math.floor(N / (numbers.length - 1)!);
+// idx = 1 / 1! = 1 → [0,1]에서 1번째 숫자를 고른다.
 
-N = (N % (numbers.length - 1)!) // N = 1 % 1! = 0
+N = (N % (numbers.length - 1)!)
+// N = 1 % 1! = 0
 answer = [2,1], numbers = [0]
 
-idx = Math.floor(N / (numbers.length - 1)!) // idx = 0 / 0! = 0 / 1 = 0 → [0]에서 0번째 숫자를 고른다.
+idx = Math.floor(N / (numbers.length - 1)!)
+// idx = 0 / 0! = 0 / 1 = 0 → [0]에서 0번째 숫자를 고른다.
 answer = [2,1,0], numbers = []
 ```
 
 위의 의사 코드에서는 N을 zero-based 기준으로 출력하게끔 되어 있으므로 one-based 기준으로는 6번째, 즉 마지막 순열을 반환하게 된다.
 
-실제 프로그래밍 언어를 이용하여 구현한다면, 선택된 요소를 제거한 배열을 반환하는 함수와 `factorial` 함수를 구현하여 적용하면 된다.
+```javascript
+function solution(n, k) {
+  const rangeFromOneToLimit = limit => {
+    return Array.from({ length: limit }, (_, i) => i + 1);
+  };
+  const factorial = (n, currentStep = 1, currentValue = 1) => {
+    if (!n || n === current) return currentValue;
+    return factorial(n, currentStep + 1, currentValue * (currentStep + 1));
+  };
+  const removeElementByIdx = (array, idx) => {
+    return [...array.slice(0, idx), ...array.slice(idx + 1)];
+  };
+
+  k = k - 1;
+  const answer = [];
+  let persons = rangeFromOneToLimit(n);
+  while (persons.length) {
+    const factResult = factorial(persons.length - 1);
+    const idx = Math.floor(k / factResult);
+    answer.push(persons[idx]);
+    k %= factResult;
+    persons = removeElementByIdx(persons, idx);
+  }
+  return answer;
+}
+```

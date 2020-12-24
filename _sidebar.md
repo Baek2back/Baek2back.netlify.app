@@ -1,11 +1,10 @@
-- 📋: Docsify
-  - [Docsify Alerts](/docs/docsify/docsify-flexible-alerts.md)
 - 🖌: CSS
 
   - [CSS Rendering System](/docs/css/css-rendering-system/css-rendering-system.md)
   - [Margin collapse](/docs/css/margin-collapse/margin-collapse.md)
 
 - ⚙️: Javascript
+
   - 🛠: Refactoring
     - [Chapter 01](/docs/javascript/refactoring/chapter01.md)
   - 🔍: Concept

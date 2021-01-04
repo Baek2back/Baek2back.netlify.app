@@ -33,8 +33,11 @@
   - ✂️: Yak Shaving
     - [자바스크립트 엔진 최적화 기법](/docs/javascript/yak-shaving/javascript-engine-optimization/javascript-engine-optimization.md)
     - [꼬리재귀 최적화](/docs/javascript/yak-shaving/tail-recursion-optimization/tail-recursion-optimization.md)
+  - 🧩: Web Components
+    - [Lifecycle API](/docs/javascript/web-components/lifecycle.md)
 
 - 🗓: Day by Day.
+  - [[201231] TIL](/docs/day-by-day/201231-TIL.md)
   - [[201230] TIL](/docs/day-by-day/201230-TIL.md)
   - [[201228] TIL](/docs/day-by-day/201228-TIL.md)
   - [[201224] TIL](/docs/day-by-day/201224-TIL.md)

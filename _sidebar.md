@@ -1,27 +1,27 @@
-- 🖌: CSS
+- **🖌: CSS**
 
   - [CSS Rendering System](/docs/css/css-rendering-system/css-rendering-system.md)
   - [Margin collapse](/docs/css/margin-collapse/margin-collapse.md)
 
-- ⚙️: Javascript
+- **⚙️: Javascript**
 
-  - 🛠: Refactoring
+  - **🛠: Refactoring**
     - [Chapter 01](/docs/javascript/refactoring/chapter01.md)
-  - 🔍: Concept
+  - **🔍: Concept**
     - [Symbol](/docs/javascript/concept/symbol/symbol.md)
     - [Iterable](/docs/javascript/concept/iterable/iterable.md)
     - [Spread Syntax](/docs/javascript/concept/spread-syntax/spread-syntax.md)
     - [Destructuring Assignment](/docs/javascript/concept/destructuring-assignment/destructuring-assignment.md)
     - [Immutable vs Mutable](/docs/javascript/concept/immutable-vs-mutable/immutable-vs-mutable.md)
-    - [Prototype](/docs/javascript/concept/prototype/prototype.md)
-  - 👍🏻: Usage
+    - [Module](/docs/javascript/concept/module/module.md)
+  - **👍🏻: Usage**
     - [`number` ↔ `string` 타입 변환 수행 속도 비교](/docs/javascript/usage/type-conversion-comparison/type-conversion-comparison.md)
     - [`RegExp.prototype.test()`](/docs/javascript/usage/RegExp.prototype.test.md)
     - [`JSON.parse()`](/docs/javascript/usage/JSON.parse.md)
     - [`Number.isNaN()`](/docs/javascript/usage/Number.isNaN.md)
-  - 🌪: Paradigm
+  - **🌪: Paradigm**
     - [함수형 자바스크립트](/docs/javascript/paradigm/functional-javascript.md)
-  - 🔥: Algorithm
+  - **🔥: Algorithm**
     - [순열과 조합](/docs/javascript/algorithm/permutations-and-combinations.md)
     - [N번째 순열](/docs/javascript/algorithm/nth-permutation/nth-permuation.md)
     - [집합(Set) 구현하기](/docs/javascript/algorithm/set.md)
@@ -30,13 +30,13 @@
     - [배열 비교하기](/docs/javascript/algorithm/array-compare.md)
     - [우선순위 큐](/docs/javascript/algorithm/priority-queue/priority-queue.md)
     - [Quick Sort](/docs/javascript/algorithm/quicksort/quicksort.md)
-  - ✂️: Yak Shaving
+  - **✂️: Yak Shaving**
     - [자바스크립트 엔진 최적화 기법](/docs/javascript/yak-shaving/javascript-engine-optimization/javascript-engine-optimization.md)
     - [꼬리재귀 최적화](/docs/javascript/yak-shaving/tail-recursion-optimization/tail-recursion-optimization.md)
-  - 🧩: Web Components
+  - **🧩: Web Components**
     - [Lifecycle API](/docs/javascript/web-components/lifecycle.md)
 
-- 🗓: Day by Day.
+- **🗓: Day by Day.**
   - [[201231] TIL](/docs/day-by-day/201231-TIL.md)
   - [[201230] TIL](/docs/day-by-day/201230-TIL.md)
   - [[201228] TIL](/docs/day-by-day/201228-TIL.md)

@@ -35,6 +35,8 @@
     - [꼬리재귀 최적화](/docs/javascript/yak-shaving/tail-recursion-optimization/tail-recursion-optimization.md)
   - **🧩: Web Components**
     - [Lifecycle API](/docs/javascript/web-components/lifecycle.md)
+    - [Shadow DOM](/docs/javascript/web-components/shadowdom.md)
+    - [`<TEMPLATE>` TAG](/docs/javascript/web-components/template.md)
 
 - **🗓: Day by Day.**
   - [[201231] TIL](/docs/day-by-day/201231-TIL.md)

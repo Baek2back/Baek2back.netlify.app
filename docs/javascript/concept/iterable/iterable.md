@@ -16,8 +16,6 @@ Well-known Symbol인 `Symbol.iterator`를 프로퍼티 키로 사용한 메서�
 
 이터러블의 `Symbol.iterator` 메서드를 호출하면 이터레이터 프로토콜을 준수한 **이터레이터**를 반환한다. 이터레이터는 `next` 메서드를 보유하고 있으며 `next` 메서드를 호출하면 이터러블을 순회하며 `value`와 `done`을 프로퍼티 키로 갖는 `Iterator Result` 객체를 반환한다. 이러한 규칙을 이터레이터 프로토콜이라 하며, **이터레이터 프로토콜을 준수한 객체를 이터레이터라 한다.** 이터레이터는 이터러블의 요소를 탐색하기 위한 포인터 역할을 한다.
 
-![iteration-protocol](iteration-protocol.png)
-
 ## 이터러블
 
 이터러블은 `Symbol.iterator`를 프로퍼티 키로 사용한 메서드를 직접 구현하거나 프로토타입 체인을 통해 상속받은 객체를 말한다.
@@ -199,8 +197,6 @@ console.log(arr); // [1,2,3]
 만약 Provider가 각각의 순회 방식을 갖게 된다면 Consumer는 각각의 Provider에 대한 순회 방식을 모두 고려해야 한다. 그러나 Provider가 일관된 규칙을 갖는 것이 보장(이터레이션 프로토콜)된다면 Consumer는 해당 규칙에 대응할 수 있도록만 구현하면 된다.
 
 이처럼 이터레이션 프로토콜은 다양한 Provider가 하나의 순회 방식을 갖도록 강제하여 Consumer가 효율적으로 다양한 Provider에 대응할 수 있도록 **Consumer와 Provider를 연결하는 인터페이스의 역할을 하게 되는 것이다.**
-
-![consumer-provider](consumer-provider.png)
 
 ## 사용자 정의 이터러블
 

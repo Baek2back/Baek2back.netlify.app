@@ -46,6 +46,10 @@
           '/.*/_sidebar.md': '/_sidebar.md'
         }
       };
+      window.addEventListener('click', e => {
+        const parent = window.parent;
+        parent.postMessage('클릭되었습니다', '*')
+      })
     </script>
   </body>
 </html>
